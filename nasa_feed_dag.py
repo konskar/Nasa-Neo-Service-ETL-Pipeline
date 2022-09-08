@@ -4,8 +4,6 @@ from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 
-import os, sys; sys.path.append(os.path.dirname(os.path.realpath(__file__)))
-
 from nasa_neo_service_etl_dag import functions as f
 from nasa_neo_service_etl_dag import config as cfg
 
