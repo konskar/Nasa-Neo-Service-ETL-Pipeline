@@ -1,0 +1,8 @@
+
+/.env
+/run_function.py
+/http_cache.sqlite
+/*.json
+/*.parquet
+/__pycache__
+/script.py
