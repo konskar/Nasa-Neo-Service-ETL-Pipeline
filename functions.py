@@ -12,8 +12,10 @@ from pyspark.sql.window import Window
 from pyspark.sql.functions import row_number
 from pymongo import MongoClient
 
+import os, sys; sys.path.append(os.path.dirname(os.path.realpath(__file__)))
+
 # Local application imports
-from nasa_etl_job import config as cfg
+from nasa_neo_service_etl_dag import config as cfg
 
 
 spark = SparkSession \

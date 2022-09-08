@@ -4,8 +4,10 @@ from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 
-from nasa_etl_job import functions as f
-from nasa_etl_job import config as cfg
+import os, sys; sys.path.append(os.path.dirname(os.path.realpath(__file__)))
+
+from nasa_neo_service_etl_dag import functions as f
+from nasa_neo_service_etl_dag import config as cfg
 
 default_args = {
     "owner": "airflow",
