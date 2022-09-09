@@ -1,33 +1,35 @@
 import os
 
-airflow = {
-    "project_path": "/c/Users/KonstantinosKaragian/airflowhome/dags/nasa_neo_service_etl_dag",
-    "email_list": ["kokargag@gmail.com", "konskar93@gmail.com"]
-}
+from dotenv import load_dotenv
+from pathlib import Path
 
+dotenv_path = Path('/c/Users/KonstantinosKaragian/airflowhome/dags/nasa_neo_service_etl_dag/.env')
+load_dotenv(dotenv_path=dotenv_path)
+
+airflow = {
+    "project_path": os.getenv('PROJECT_ABSOLUTE_PATH'),
+    "email_list": os.getenv('AIRFLOW_EMAIL_LIST')
+}
 
 nasa_feed_api = {
-    "url": "https://api.nasa.gov/neo/rest/v1/feed",
-    "api_key": 'sHNjNLf1d44OkX8pZj2Dz2eqyrBpmvnjnfEKGTr7',
-    # "api_key":'DEMO_KEY',
-    "json_file": "nasa_neo_service_api.json",
-    "cache": 'http_cache'
+    "url": os.getenv('API_URL'),
+    "api_key": os.getenv('API_KEY'),
+    "json_file": os.getenv('API_JSON_FILE'),
+    "cache": os.getenv('API_CACHE')
 }
-
 
 spark = {
-    "app_name": 'Demo Spark App',
-    "parquet_path": 'nasa_neo_service_ingestion.parquet'
+    "app_name": os.getenv('SPARK_APP_NAME'),
+    "parquet_path": os.getenv('PARQUET_PATH')
 }
 
-
 mongo_db = {
-    "url": 'mongodb://localhost:27414',
-    "host": 'localhost',
+    "url": os.getenv('MONGODB_URL'),
+    "host": os.getenv('MONGODB_HOST'),
     "port": 27414,
-    "database": 'nasa_gov',
-    "staging_collection": 'nasa_neo_service_staging',
-    "production_collection": 'nasa_neo_service_production'
+    "database": os.getenv('MONGODB_DATABASE'),
+    "staging_collection": os.getenv('MONGODB_STAGING_COLLECTION'),
+    "production_collection": os.getenv('MONGODB_PRODUCTION_COLLECTION')
 }
 
 absolute_paths = {
