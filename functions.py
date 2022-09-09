@@ -51,7 +51,7 @@ def get_nasa_feed_api_data(**kwargs):
     # convert str to date object to calculate dynamic past dates, then convert again to str to pass to application
     execution_date_object = datetime.strptime(execution_date, "%Y-%m-%d")
 
-    start_date_object = execution_date_object - timedelta(days=3)
+    start_date_object = execution_date_object - timedelta(days=1)
     start_date = start_date_object.strftime("%Y-%m-%d")
 
     end_date_object = execution_date_object - timedelta(days=0)
@@ -152,26 +152,27 @@ def load_parquet_to_mongodb_stage():
     nasa_feed_df.write.format("mongo").mode("overwrite") \
         .option("uri", cfg.mongo_db["url"]) \
         .option("database", cfg.mongo_db["database"]) \
-        .option("collection", cfg.mongo_db["collection"]) \
+        .option("collection", cfg.mongo_db["staging_collection"]) \
         .save()
 
 
 def update_mongodb_production():
     with MongoClient(host=cfg.mongo_db["host"], port=cfg.mongo_db["port"]) as client:
 
-        nasa_feed_stage = client.nasa_feed.nasa_feed_stage
-        nasa_feed_production = client.nasa_feed.nasa_feed_production
+        database = getattr(client, cfg.mongo_db["database"])
+        staging_collection = getattr(database, cfg.mongo_db["staging_collection"])
+        production_collection = getattr(database, cfg.mongo_db["production_collection"]) # equilevant client.nasa_gov.nasa_neo_service_production
 
         stage_rows = []
 
         # create dict list with stage rows
-        for doc in nasa_feed_stage.find():
+        for doc in staging_collection.find():
             stage_rows.append(doc)
 
         # delete from prod rows that exist on stage
         for row in stage_rows:
-            nasa_feed_production.delete_one(
+            production_collection.delete_one(
                 {"date": row["date"], "neo_reference_id": row["neo_reference_id"]})
 
         # load stage records to prod
-        nasa_feed_production.insert_many(stage_rows)
+        production_collection.insert_many(stage_rows)
