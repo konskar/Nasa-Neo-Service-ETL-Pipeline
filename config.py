@@ -26,7 +26,7 @@ spark = {
 mongo_db = {
     "url": os.getenv('MONGODB_URL'),
     "host": os.getenv('MONGODB_HOST'),
-    "port": 27414,
+    "port": int(os.getenv('MONGODB_PORT')),
     "database": os.getenv('MONGODB_DATABASE'),
     "staging_collection": os.getenv('MONGODB_STAGING_COLLECTION'),
     "production_collection": os.getenv('MONGODB_PRODUCTION_COLLECTION')
