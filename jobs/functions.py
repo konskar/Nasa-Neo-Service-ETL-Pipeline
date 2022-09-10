@@ -1,20 +1,20 @@
 
 # Standard library imports
 from datetime import datetime, timedelta
-import requests
-import requests_cache
 import json
-import os
 
 # Third party imports
+import requests
+import requests_cache
+
 from pyspark.sql import SparkSession
 from pyspark.sql.window import Window
 from pyspark.sql.functions import row_number
+
 from pymongo import MongoClient
 
 # Local application imports
 from nasa_neo_service_etl_dag.configs import etl_config as cfg
-
 
 spark = SparkSession \
     .builder \
@@ -69,9 +69,9 @@ def get_nasa_feed_api_data(**kwargs):
 
     params = {
         "start_date": start_date,
-        "end_date": end_date, 
+        "end_date": end_date,
         # "start_date": '2022-07-20',
-        # "end_date": '2022-07-23',         
+        # "end_date": '2022-07-23',
         "api_key": cfg.nasa_feed_api["api_key"]
     }
 
@@ -156,13 +156,18 @@ def load_parquet_to_mongodb_stage():
         .option("collection", cfg.mongo_db["staging_collection"]) \
         .save()
 
+    # spark.stop()
+
 
 def update_mongodb_production():
     with MongoClient(host=cfg.mongo_db["host"], port=cfg.mongo_db["port"]) as client:
 
         database = getattr(client, cfg.mongo_db["database"])
-        staging_collection = getattr(database, cfg.mongo_db["staging_collection"])
-        production_collection = getattr(database, cfg.mongo_db["production_collection"]) # equilevant client.nasa_gov.nasa_neo_service_production
+        staging_collection = getattr(
+            database, cfg.mongo_db["staging_collection"])
+        # equilevant client.nasa_gov.nasa_neo_service_production
+        production_collection = getattr(
+            database, cfg.mongo_db["production_collection"])
 
         staging_documents = []
 
