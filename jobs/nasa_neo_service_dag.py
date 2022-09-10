@@ -4,8 +4,8 @@ from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 
-from nasa_neo_service_etl_dag import functions as f
-from nasa_neo_service_etl_dag import config as cfg
+from nasa_neo_service_etl_dag.jobs import functions as f
+from nasa_neo_service_etl_dag.configs import etl_config as cfg
 
 default_args = {
     "owner": "airflow",
@@ -19,7 +19,7 @@ default_args = {
 }
 
 with DAG(
-    dag_id="nasa_feed_etl_dag",
+    dag_id="nasa_neo_service_ingestion_dag",
     schedule_interval="@once",
     default_args=default_args,
     catchup=False,

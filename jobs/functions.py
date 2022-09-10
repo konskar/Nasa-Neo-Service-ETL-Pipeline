@@ -13,12 +13,13 @@ from pyspark.sql.functions import row_number
 from pymongo import MongoClient
 
 # Local application imports
-from nasa_neo_service_etl_dag import config as cfg
+from nasa_neo_service_etl_dag.configs import etl_config as cfg
 
 
 spark = SparkSession \
     .builder \
     .appName(cfg.spark["app_name"]) \
+    .master('local[*]') \
     .config("spark.jars.packages", "org.mongodb.spark:mongo-spark-connector_2.12:3.0.1") \
     .getOrCreate()
 
