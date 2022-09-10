@@ -5,6 +5,7 @@
 /input_output_files/*.json
 /input_output_files/*.parquet
 /jobs/__pycache__
+/configs/__pycache__
 /script.py
 /test.py
 /venv
