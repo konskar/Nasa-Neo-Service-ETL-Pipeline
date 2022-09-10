@@ -4,6 +4,6 @@
 /http_cache.sqlite
 /*.json
 /*.parquet
-/__pycache__
+/jobs/__pycache__
 /script.py
 /test.py
