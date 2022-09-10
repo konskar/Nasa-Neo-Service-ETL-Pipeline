@@ -1,9 +1,12 @@
 
+# Standard library imports
 from datetime import datetime, timedelta
 
+# Third party imports
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 
+# Local application imports
 from nasa_neo_service_etl_dag.jobs import functions as f
 from nasa_neo_service_etl_dag.configs import etl_config as cfg
 

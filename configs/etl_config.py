@@ -1,5 +1,8 @@
+
+# Standard library imports
 import os
 
+# Third party imports
 from dotenv import load_dotenv
 from pathlib import Path
 
