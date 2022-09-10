@@ -1,9 +1,10 @@
 
 /.env
 /run_function.py
-/http_cache.sqlite
-/*.json
-/*.parquet
+/input_output_files/http_cache.sqlite
+/input_output_files/*.json
+/input_output_files/*.parquet
 /jobs/__pycache__
 /script.py
 /test.py
+/venv
