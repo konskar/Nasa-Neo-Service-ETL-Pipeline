@@ -163,16 +163,16 @@ def update_mongodb_production():
         staging_collection = getattr(database, cfg.mongo_db["staging_collection"])
         production_collection = getattr(database, cfg.mongo_db["production_collection"]) # equilevant client.nasa_gov.nasa_neo_service_production
 
-        stage_rows = []
+        staging_documents = []
 
         # create dict list with stage rows
         for doc in staging_collection.find():
-            stage_rows.append(doc)
+            staging_documents.append(doc)
 
         # delete from prod rows that exist on stage
-        for row in stage_rows:
+        for row in staging_documents:
             production_collection.delete_one(
                 {"date": row["date"], "neo_reference_id": row["neo_reference_id"]})
 
         # load stage records to prod
-        production_collection.insert_many(stage_rows)
+        production_collection.insert_many(staging_documents)
