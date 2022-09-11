@@ -141,9 +141,9 @@ def load_parquet_to_mongodb_staging():
     try:
         global spark
 
-        nasa_feed_df = spark.read.parquet(cfg.absolute_paths["parquet_abs_path"])
+        nasa_neo_df = spark.read.parquet(cfg.absolute_paths["parquet_abs_path"])
 
-        nasa_feed_df.write.format("mongo").mode("overwrite") \
+        nasa_neo_df.write.format("mongo").mode("overwrite") \
             .option("uri", cfg.mongo_db["url"]) \
             .option("database", cfg.mongo_db["database"]) \
             .option("collection", cfg.mongo_db["staging_collection"]) \
