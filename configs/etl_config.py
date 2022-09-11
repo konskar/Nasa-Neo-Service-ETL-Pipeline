@@ -35,6 +35,15 @@ mongo_db = {
     "production_collection": os.getenv('MONGODB_PRODUCTION_COLLECTION')
 }
 
+smtp = {
+    "port" : int(os.getenv('SMTP_PORT')), # For SSL
+    "smtp_server" : os.getenv('SMTP_SERVER'),
+    "sender_email" : os.getenv('SMTP_SENDER_EMAIL'),
+    "receiver_email_list" : [os.getenv('SMTP_RECIEVER_EMAIL_USER_A'), os.getenv('SMTP_RECIEVER_EMAIL_USER_B')],
+    "receiver_email" : os.getenv('SMTP_RECIEVER_EMAIL_USER_A'),
+    "password" : os.getenv('SMTP_PASSWORD')
+}
+
 absolute_paths = {
     "json_abs_path": os.path.join(airflow["project_path"], nasa_feed_api["json_file"]),
     "cache_abs_path": os.path.join(airflow["project_path"], nasa_feed_api["cache"]),
