@@ -10,8 +10,6 @@ from pyspark.sql import SparkSession
 from pyspark.sql.window import Window
 from pyspark.sql.functions import row_number
 from pymongo import MongoClient
-import smtplib
-import ssl
 from airflow import AirflowException
 
 # Local application imports
@@ -121,17 +119,14 @@ def transform_and_write_to_parquet():
         nasa_neo_df = spark.read.option("multiline", "true").json(
             cfg.absolute_paths["json_abs_path"])
 
-        # df_nasa_feed.printSchema()
-        # df_nasa_feed.show()
-
         cached_nasa_neo_df = nasa_neo_df.cache()
 
         windowSpec = Window.partitionBy("date").orderBy("neo_reference_id")
 
-        df_nasa_feed_updated_dfapi = cached_nasa_neo_df.withColumn(
+        nasa_neo_transformed_df = cached_nasa_neo_df.withColumn(
             "row_number", row_number().over(windowSpec))
 
-        df_nasa_feed_updated_dfapi.write.mode('overwrite').partitionBy(
+        nasa_neo_transformed_df.write.mode('overwrite').partitionBy(
             "date").parquet(cfg.absolute_paths["parquet_abs_path"])
 
         nasa_neo_df.unpersist()  # we don't need it anymore
@@ -142,15 +137,21 @@ def transform_and_write_to_parquet():
 
 
 def load_parquet_to_mongodb_staging():
-    global spark
 
-    nasa_feed_df = spark.read.parquet(cfg.absolute_paths["parquet_abs_path"])
+    try:
+        global spark
 
-    nasa_feed_df.write.format("mongo").mode("overwrite") \
-        .option("uri", cfg.mongo_db["url"]) \
-        .option("database", cfg.mongo_db["database"]) \
-        .option("collection", cfg.mongo_db["staging_collection"]) \
-        .save()
+        nasa_feed_df = spark.read.parquet(cfg.absolute_paths["parquet_abs_path"])
+
+        nasa_feed_df.write.format("mongo").mode("overwrite") \
+            .option("uri", cfg.mongo_db["url"]) \
+            .option("database", cfg.mongo_db["database"]) \
+            .option("collection", cfg.mongo_db["staging_collection"]) \
+            .save()
+
+    except Exception as e:
+
+        raise AirflowException({e})
 
 
 def populate_mongodb_production():
@@ -159,10 +160,8 @@ def populate_mongodb_production():
         with MongoClient(host=cfg.mongo_db["host"], port=cfg.mongo_db["port"]) as client:
 
             database = getattr(client, cfg.mongo_db["database"])
-            staging_collection = getattr(
-                database, cfg.mongo_db["staging_collection"]) # equilevant client.nasa_gov.nasa_neo_service_production ffff
-            production_collection = getattr(
-                database, cfg.mongo_db["production_collection"])
+            staging_collection = getattr(database, cfg.mongo_db["staging_collection"])
+            production_collection = getattr(database, cfg.mongo_db["production_collection"])
 
             staging_documents = []
 
