@@ -16,7 +16,7 @@ default_args = {
     "owner": "airflow",
     "depends_on_past": False,
     "start_date": datetime(2019, 4, 30),
-    "email": cfg.smtp["receiver_email_list"],
+    "email": cfg.email["receiver_email_list"],
     "email_on_failure": True,
     "email_on_retry": False,
     "retries": 3,
@@ -53,7 +53,7 @@ with DAG(
 
     # send_run_success_notification = EmailOperator(
     #     task_id ='send_run_success_notification',
-    #     to = cfg.smtp["receiver_email_list"],
+    #     to = cfg.email["receiver_email_list"],
     #     subject = 'Airflow Notification: "nasa_neo_service_ingestion_dag"',
     #     html_content = """ <h3>Dag run sucesfully</h3> """
     # )

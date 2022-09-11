@@ -35,13 +35,9 @@ mongo_db = {
     "production_collection": os.getenv('MONGODB_PRODUCTION_COLLECTION')
 }
 
-smtp = {
-    "port" : int(os.getenv('SMTP_PORT')), # For SSL
-    "smtp_server" : os.getenv('SMTP_SERVER'),
-    "sender_email" : os.getenv('SMTP_SENDER_EMAIL'),
+email = {
     "receiver_email_list" : [os.getenv('SMTP_RECIEVER_EMAIL_USER_A'), os.getenv('SMTP_RECIEVER_EMAIL_USER_B')],
     "receiver_email" : os.getenv('SMTP_RECIEVER_EMAIL_USER_A'),
-    "password" : os.getenv('SMTP_PASSWORD')
 }
 
 absolute_paths = {
