@@ -75,8 +75,10 @@ def collect_api_data(**kwargs):
             "api_key": cfg.nasa_neo_api["api_key"]
         }
 
-        res = requests.get(url=url, params=params, timeout=120)
-        data = res.json()
+        api_response = requests.get(url=url, params=params, timeout=120)
+        data = api_response.json()
+
+        # print(json.dumps(data, indent=2))
 
         dict_list = []
 
@@ -88,14 +90,22 @@ def collect_api_data(**kwargs):
                 neo_reference_id = row["neo_reference_id"]
                 name = row["name"]
                 nasa_jpl_url = row["nasa_jpl_url"]
-                estimated_diameter_km_min = row["estimated_diameter"]["kilometers"]["estimated_diameter_min"]
+                estimated_diameter_min_in_km = row["estimated_diameter"]["kilometers"]["estimated_diameter_min"]
+                estimated_diameter_max_in_km = row["estimated_diameter"]["kilometers"]["estimated_diameter_max"]
+                is_potentially_hazardous_asteroid = row["is_potentially_hazardous_asteroid"]
+                velocity_in_km_per_hour = row["close_approach_data"][0]["relative_velocity"]["kilometers_per_hour"]
+                lunar_distance = row["close_approach_data"][0]["miss_distance"]["lunar"]
 
                 _dict = {
                     'date': date,
                     'neo_reference_id': neo_reference_id,
                     'name': name,
                     'nasa_jpl_url': nasa_jpl_url,
-                    'estimated_diameter_km_min': estimated_diameter_km_min,
+                    'estimated_diameter_min_in_km': estimated_diameter_min_in_km,
+                    'estimated_diameter_max_in_km' : estimated_diameter_max_in_km,
+                    'is_potentially_hazardous_asteroid' : is_potentially_hazardous_asteroid,
+                    'velocity_in_km_per_hour' : velocity_in_km_per_hour,
+                    'lunar_distance' : lunar_distance,
                 }
 
                 dict_list.append(_dict)
