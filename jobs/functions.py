@@ -7,8 +7,7 @@ import json
 import requests
 import requests_cache
 from pyspark.sql import SparkSession
-from pyspark.sql.window import Window
-from pyspark.sql.functions import row_number
+from pyspark.sql.functions import col
 from pymongo import MongoClient
 from airflow import AirflowException
 
@@ -131,15 +130,12 @@ def transform_and_write_to_parquet():
 
         cached_nasa_neo_df = nasa_neo_df.cache()
 
-        windowSpec = Window.partitionBy("date").orderBy("neo_reference_id")
-
-        nasa_neo_transformed_df = cached_nasa_neo_df.withColumn(
-            "row_number", row_number().over(windowSpec))
+        nasa_neo_transformed_df = cached_nasa_neo_df.withColumn("velocity_in_miles_per_hour", col("velocity_in_km_per_hour") * 0.621371)
 
         nasa_neo_transformed_df.write.mode('overwrite').partitionBy(
             "date").parquet(cfg.absolute_paths["parquet_abs_path"])
 
-        nasa_neo_df.unpersist()  # we don't need it anymore
+        nasa_neo_df.unpersist()
 
     except Exception as e:
 
