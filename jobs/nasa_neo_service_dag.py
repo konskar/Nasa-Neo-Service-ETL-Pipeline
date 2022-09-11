@@ -25,7 +25,7 @@ default_args = {
 
 with DAG(
     dag_id="nasa_neo_service_ingestion_dag",
-    schedule_interval="@once",
+    schedule_interval="0 7 * * *",
     default_args=default_args,
     catchup=False,
 ) as dag:
@@ -58,13 +58,4 @@ with DAG(
     #     html_content = """ <h3>Dag run sucesfully</h3> """
     # )
 
-tasks = [
-    collect_api_data,
-    transform_and_write_to_parquet,
-    load_parquet_to_mongodb_staging,
-    populate_mongodb_production
-]
-
-chain(*tasks)
-
-# collect_api_data >> transform_and_write_to_parquet >> load_parquet_to_mongodb_staging >> populate_mongodb_production # >> send_run_success_notification
+collect_api_data >> transform_and_write_to_parquet >> load_parquet_to_mongodb_staging >> populate_mongodb_production # >> send_run_success_notification
