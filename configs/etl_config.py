@@ -14,7 +14,7 @@ airflow = {
     "email_list": os.getenv('AIRFLOW_EMAIL_LIST')
 }
 
-nasa_feed_api = {
+nasa_neo_api = {
     "url": os.getenv('API_URL'),
     "api_key": os.getenv('API_KEY'),
     "json_file": os.getenv('API_JSON_FILE'),
@@ -45,7 +45,7 @@ smtp = {
 }
 
 absolute_paths = {
-    "json_abs_path": os.path.join(airflow["project_path"], nasa_feed_api["json_file"]),
-    "cache_abs_path": os.path.join(airflow["project_path"], nasa_feed_api["cache"]),
+    "json_abs_path": os.path.join(airflow["project_path"], nasa_neo_api["json_file"]),
+    "cache_abs_path": os.path.join(airflow["project_path"], nasa_neo_api["cache"]),
     "parquet_abs_path": os.path.join(airflow["project_path"], spark["parquet_path"])
 }
