@@ -2,6 +2,7 @@
 # Standard library imports
 from datetime import datetime, timedelta
 import json
+import time
 
 # Third party imports
 import requests
@@ -11,9 +12,12 @@ from pyspark.sql.functions import col
 from pymongo import MongoClient
 from airflow import AirflowException
 import smtplib, ssl
+import logging
 
 # Local application imports
 from nasa_neo_service_etl_dag.configs import etl_config as cfg
+
+task_logger = logging.getLogger('airflow.task')
 
 spark = SparkSession \
     .builder \
@@ -28,6 +32,12 @@ def jprint(obj):
     print(text)
 
 
+def log_task_duration(start_time, end_time):
+    # inject custom log
+    log_msg = f"Task Duration: {end_time - start_time} seconds, {(end_time - start_time)/60} minutes"
+    task_logger.info(log_msg)
+
+
 def validate_date_format(input_date):
     try:
         return datetime.strptime(input_date, '%Y-%m-%d').date()
@@ -40,6 +50,13 @@ def validate_date_ranges(start_date, end_date):
         raise Exception(f"end_date (current value {end_date}) should be bigger than start_date (current value {start_date})")
 
 
+def send_email (message): 
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL(cfg.email["smtp_server"], cfg.email["port"], context=context) as server:
+        server.login(cfg.email["sender_email"], cfg.email["password"])
+        server.sendmail(cfg.email["sender_email"],  cfg.email["receiver_email"], message)
+
+
 def collect_api_data(**kwargs):
     """
     get api data from https://api.nasa.gov/neo/rest/v1/feed?start_date=2022-03-08&end_date=2022-03-09&api_key=DEMO_KEY
@@ -47,6 +64,8 @@ def collect_api_data(**kwargs):
     """
 
     try:
+
+        start_time = time.time()
 
         # accept date arguments if both provided, otherwise load last 3 days dynamically
         try:
@@ -121,6 +140,9 @@ def collect_api_data(**kwargs):
         with open(cfg.absolute_paths["json_abs_path"], 'w') as file:
             json.dump(dict_list, file, indent=4)
 
+        end_time = time.time()
+        log_task_duration(start_time, end_time)
+
     except Exception as e:
 
         raise AirflowException({e})
@@ -129,6 +151,7 @@ def collect_api_data(**kwargs):
 def transform_and_write_to_parquet():
 
     try:
+        start_time = time.time()
 
         global spark
 
@@ -144,6 +167,9 @@ def transform_and_write_to_parquet():
 
         nasa_neo_df.unpersist()
 
+        end_time = time.time()
+        log_task_duration(start_time, end_time)
+
     except Exception as e:
 
         raise AirflowException({e})
@@ -152,6 +178,8 @@ def transform_and_write_to_parquet():
 def load_parquet_to_mongodb_staging():
 
     try:
+        start_time = time.time()
+
         global spark
 
         nasa_neo_df = spark.read.parquet(cfg.absolute_paths["parquet_abs_path"])
@@ -162,6 +190,9 @@ def load_parquet_to_mongodb_staging():
             .option("collection", cfg.mongo_db["staging_collection"]) \
             .save()
 
+        end_time = time.time()
+        log_task_duration(start_time, end_time)
+
     except Exception as e:
 
         raise AirflowException({e})
@@ -170,6 +201,8 @@ def load_parquet_to_mongodb_staging():
 def populate_mongodb_production():
 
     try:
+        start_time = time.time()
+
         with MongoClient(host=cfg.mongo_db["host"], port=cfg.mongo_db["port"]) as client:
 
             database = getattr(client, cfg.mongo_db["database"])
@@ -190,19 +223,17 @@ def populate_mongodb_production():
             # load stage records to prod
             production_collection.insert_many(staging_documents)
 
+        end_time = time.time()
+        log_task_duration(start_time, end_time)
+
     except Exception as e:
 
         raise AirflowException({e})
 
 
-def send_email (message): 
-    context = ssl.create_default_context()
-    with smtplib.SMTP_SSL(cfg.email["smtp_server"], cfg.email["port"], context=context) as server:
-        server.login(cfg.email["sender_email"], cfg.email["password"])
-        server.sendmail(cfg.email["sender_email"],  cfg.email["receiver_email"], message)
-
-
 def send_success_notification(**kwargs):
+
+    start_time = time.time()
 
     message = f"""\
 Subject: Airflow Success Notification: Dag Run 
@@ -216,3 +247,6 @@ params: {kwargs["params"]}
 """
 
     send_email(message)
+
+    end_time = time.time()
+    log_task_duration(start_time, end_time)
