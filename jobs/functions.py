@@ -203,12 +203,6 @@ def send_email (message):
 
 
 def send_success_notification(**kwargs):
-    # message = f"""\
-    # Subject: Airflow Success Notification: {kwargs["dag_run"]}
-
-    # ds: {kwargs["ds"]}, params: {kwargs["params"]}."""
-
-    var = 3
 
     message = f"""\
 Subject: Airflow Success Notification: Dag Run 
@@ -221,5 +215,4 @@ params: {kwargs["params"]}
 
 """
 
-    print('------------------------ || -----------------------------')
     send_email(message)
