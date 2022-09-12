@@ -61,5 +61,3 @@ with DAG(
     )
 
 collect_api_data >> transform_and_write_to_parquet >> load_parquet_to_mongodb_staging >> populate_mongodb_production >> send_success_notification
-
-
