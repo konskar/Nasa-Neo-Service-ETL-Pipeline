@@ -77,8 +77,6 @@ def collect_api_data(**kwargs):
         params = {
             "start_date": start_date,
             "end_date": end_date,
-            # "start_date": '2022-07-20',
-            # "end_date": '2022-07-23',
             "api_key": cfg.nasa_neo_api["api_key"]
         }
 
