@@ -36,7 +36,7 @@ def validate_date_format(input_date):
 
 def validate_date_ranges(start_date, end_date):
     if(start_date > end_date):
-        raise Exception("enddate should be bigger than startdate")
+        raise Exception(f"end_date (current value {end_date}) should be bigger than start_date (current value {start_date})")
 
 
 def collect_api_data(**kwargs):
@@ -46,16 +46,24 @@ def collect_api_data(**kwargs):
     """
 
     try:
-        execution_date = kwargs['ds']
 
-        # convert str to date object to calculate dynamic past dates, then convert again to str to pass to application
-        execution_date_object = datetime.strptime(execution_date, "%Y-%m-%d")
+        # accept date arguments if both provided, otherwise load last 3 days dynamically
+        try:
+            start_date = kwargs["dag_run"].conf["start_date"]
+            end_date = kwargs["dag_run"].conf["end_date"]
 
-        start_date_object = execution_date_object - timedelta(days=1)
-        start_date = start_date_object.strftime("%Y-%m-%d")
+        except KeyError:
 
-        end_date_object = execution_date_object - timedelta(days=0)
-        end_date = end_date_object.strftime("%Y-%m-%d")
+            execution_date = kwargs['ds']
+
+            # convert str to date object to calculate dynamic past dates, then convert again to str to pass to application
+            execution_date_object = datetime.strptime(execution_date, "%Y-%m-%d")
+
+            start_date_object = execution_date_object - timedelta(days=2)
+            start_date = start_date_object.strftime("%Y-%m-%d")
+
+            end_date_object = execution_date_object - timedelta(days=0)
+            end_date = end_date_object.strftime("%Y-%m-%d")
 
         requests_cache.install_cache(cfg.absolute_paths["cache_abs_path"])
 
