@@ -7,15 +7,18 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.email import EmailOperator
 from airflow.models.baseoperator import chain
+import pendulum
 
 # Local application imports
 from nasa_neo_service_etl_dag.jobs import functions as f
 from nasa_neo_service_etl_dag.configs import etl_config as cfg
 
+local_tz = pendulum.timezone("Europe/Athens")
+
 default_args = {
     "owner": "airflow",
     "depends_on_past": False,
-    "start_date": datetime(2019, 4, 30),
+    "start_date": datetime(2019, 4, 30, tzinfo = local_tz),
     "email": cfg.email["receiver_email_list"],
     "email_on_failure": True,
     "email_on_retry": False,
@@ -25,7 +28,7 @@ default_args = {
 
 with DAG(
     dag_id="nasa_neo_service_ingestion_dag",
-    schedule_interval="5 7 * * *",
+    schedule_interval="0 7 * * *",
     default_args=default_args,
     catchup=False,
 ) as dag:
