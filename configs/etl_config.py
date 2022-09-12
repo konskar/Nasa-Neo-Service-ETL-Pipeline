@@ -36,6 +36,10 @@ mongo_db = {
 }
 
 email = {
+    "port" : int(os.getenv('SMTP_PORT')),
+    "smtp_server" : os.getenv('SMTP_SERVER'),
+    "sender_email" : os.getenv('SMTP_SENDER_EMAIL'),
+    "password" : os.getenv('SMTP_PASSWORD'),
     "receiver_email_list" : [os.getenv('SMTP_RECIEVER_EMAIL_USER_A'), os.getenv('SMTP_RECIEVER_EMAIL_USER_B')],
     "receiver_email" : os.getenv('SMTP_RECIEVER_EMAIL_USER_A'),
 }

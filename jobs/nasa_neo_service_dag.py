@@ -25,7 +25,7 @@ default_args = {
 
 with DAG(
     dag_id="nasa_neo_service_ingestion_dag",
-    schedule_interval="0 7 * * *",
+    schedule_interval="5 7 * * *",
     default_args=default_args,
     catchup=False,
 ) as dag:
@@ -51,11 +51,12 @@ with DAG(
         retries=1
     )
 
-    # send_run_success_notification = EmailOperator(
-    #     task_id ='send_run_success_notification',
-    #     to = cfg.email["receiver_email_list"],
-    #     subject = 'Airflow Notification: "nasa_neo_service_ingestion_dag"',
-    #     html_content = """ <h3>Dag run sucesfully</h3> """
-    # )
+    send_success_notification = PythonOperator(
+        task_id ='send_success_notification',
+        python_callable=f.send_success_notification,
+        retries=1
+    )
 
-collect_api_data >> transform_and_write_to_parquet >> load_parquet_to_mongodb_staging >> populate_mongodb_production # >> send_run_success_notification
+collect_api_data >> transform_and_write_to_parquet >> load_parquet_to_mongodb_staging >> populate_mongodb_production >> send_success_notification
+
+

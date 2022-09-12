@@ -10,6 +10,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import col
 from pymongo import MongoClient
 from airflow import AirflowException
+import smtplib, ssl
 
 # Local application imports
 from nasa_neo_service_etl_dag.configs import etl_config as cfg
@@ -192,3 +193,33 @@ def populate_mongodb_production():
     except Exception as e:
 
         raise AirflowException({e})
+
+
+def send_email (message): 
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL(cfg.email["smtp_server"], cfg.email["port"], context=context) as server:
+        server.login(cfg.email["sender_email"], cfg.email["password"])
+        server.sendmail(cfg.email["sender_email"],  cfg.email["receiver_email"], message)
+
+
+def send_success_notification(**kwargs):
+    # message = f"""\
+    # Subject: Airflow Success Notification: {kwargs["dag_run"]}
+
+    # ds: {kwargs["ds"]}, params: {kwargs["params"]}."""
+
+    var = 3
+
+    message = f"""\
+Subject: Airflow Success Notification: Dag Run 
+
+dag_run: {kwargs["dag_run"]}
+
+ds: {kwargs["ds"]}
+
+params: {kwargs["params"]}
+
+"""
+
+    print('------------------------ || -----------------------------')
+    send_email(message)
