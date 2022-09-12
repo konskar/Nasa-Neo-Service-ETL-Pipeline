@@ -178,11 +178,11 @@ def populate_mongodb_production():
 
             staging_documents = []
 
-            # create dict list with stage rows
+            # create dict list with stage documents
             for doc in staging_collection.find():
                 staging_documents.append(doc)
 
-            # delete from prod rows that exist on stage
+            # delete prod documents that exist on stage, use unique key: date & neo_reference_id
             for row in staging_documents:
                 production_collection.delete_one(
                     {"date": row["date"], "neo_reference_id": row["neo_reference_id"]})
