@@ -27,37 +27,32 @@ spark = SparkSession \
     .getOrCreate()
 
 
-def jprint(obj):
-    text = json.dumps(obj, sort_keys=True, indent=4)
-    print(text)
-
-
-def log_task_duration(start_time, end_time):
+def log_task_duration(start_time: float, end_time: float) -> None:
     # inject custom log
     log_msg = f"Task Duration: {end_time - start_time} seconds, {(end_time - start_time)/60} minutes"
     task_logger.info(log_msg)
 
 
-def validate_date_format(input_date):
+def validate_date_format(input_date: str) -> None:
     try:
         return datetime.strptime(input_date, '%Y-%m-%d').date()
     except ValueError:
         raise ValueError("Incorrect data format, should be YYYY-MM-DD")
 
 
-def validate_date_ranges(start_date, end_date):
+def validate_date_ranges(start_date: str, end_date: str) -> None:
     if(start_date > end_date):
         raise Exception(f"end_date (current value {end_date}) should be bigger than start_date (current value {start_date})")
 
 
-def send_email (message): 
+def send_email (message: str) -> None:
     context = ssl.create_default_context()
     with smtplib.SMTP_SSL(cfg.email["smtp_server"], cfg.email["port"], context=context) as server:
         server.login(cfg.email["sender_email"], cfg.email["password"])
         server.sendmail(cfg.email["sender_email"],  cfg.email["receiver_email"], message)
 
 
-def collect_api_data(**kwargs):
+def collect_api_data(**kwargs: dict) -> None:
     """
     get api data from https://api.nasa.gov/neo/rest/v1/feed?start_date=2022-03-08&end_date=2022-03-09&api_key=DEMO_KEY
     for last 4 days
@@ -148,7 +143,7 @@ def collect_api_data(**kwargs):
         raise AirflowException({e})
 
 
-def transform_and_write_to_parquet():
+def transform_and_write_to_parquet() -> None:
 
     try:
         start_time = time.time()
@@ -175,7 +170,7 @@ def transform_and_write_to_parquet():
         raise AirflowException({e})
 
 
-def load_parquet_to_mongodb_staging():
+def load_parquet_to_mongodb_staging() -> None:
 
     try:
         start_time = time.time()
@@ -198,7 +193,7 @@ def load_parquet_to_mongodb_staging():
         raise AirflowException({e})
 
 
-def populate_mongodb_production():
+def populate_mongodb_production() -> None:
 
     try:
         start_time = time.time()
@@ -231,7 +226,7 @@ def populate_mongodb_production():
         raise AirflowException({e})
 
 
-def send_success_notification(**kwargs):
+def send_success_notification(**kwargs: dict) -> None:
 
     start_time = time.time()
 
