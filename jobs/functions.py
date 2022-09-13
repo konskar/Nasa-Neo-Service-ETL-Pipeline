@@ -286,6 +286,7 @@ def send_success_notification(**kwargs: dict) -> None:
     try:
         start_time = time.time()
 
+        # Message structure should have this format and indentation for email to be properly rendered
         message = f"""\
 Subject: Airflow Success Notification: Dag Run 
 
