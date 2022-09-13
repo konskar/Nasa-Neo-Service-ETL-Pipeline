@@ -27,7 +27,7 @@ spark = SparkSession \
     .config("spark.jars.packages", "org.mongodb.spark:mongo-spark-connector_2.12:3.0.1") \
     .getOrCreate()
 
-# Functions decleration
+# Functions deceleration
 
 def log_task_duration(start_time: float, end_time: float) -> None:
     """Inject custom log entries to Airflow task log regarding execution time.
@@ -65,7 +65,7 @@ def validate_date_ranges(start_date: str, end_date: str) -> None:
 
 
 def send_email (message: str) -> None:
-    """Sends email to confugured reciever. 
+    """Sends email to configured receiver. 
 
     :param message: Email subject & body.
     :return: None
@@ -259,7 +259,7 @@ def populate_mongodb_production() -> None:
             for doc in staging_collection.find():
                 staging_documents.append(doc)
 
-            # Delete production documents that exist on stageing to avoid duplicates, since all staging documents will be loaded
+            # Delete production documents that exist on staging to avoid duplicates, since all staging documents will be loaded
             # unique key: date & neo_reference_id
             for row in staging_documents:
                 production_collection.delete_one(
