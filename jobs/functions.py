@@ -17,6 +17,7 @@ import logging
 # Local application imports
 from nasa_neo_service_etl_dag.configs import etl_config as cfg
 
+# Initialize objects
 task_logger = logging.getLogger('airflow.task')
 
 spark = SparkSession \
@@ -26,26 +27,49 @@ spark = SparkSession \
     .config("spark.jars.packages", "org.mongodb.spark:mongo-spark-connector_2.12:3.0.1") \
     .getOrCreate()
 
+# Functions decleration
 
 def log_task_duration(start_time: float, end_time: float) -> None:
-    # inject custom log
+    """Inject custom log entries to Airflow task log regarding execution time.
+
+    :param start_time: The seconds since epoch when a task started.
+    :param end_time: The seconds since epoch when a task ended.
+    :return: None
+    """  
     log_msg = f"Task Duration: {end_time - start_time} seconds, {(end_time - start_time)/60} minutes"
     task_logger.info(log_msg)
 
 
-def validate_date_format(input_date: str) -> None:
+def validate_date_format(date: str) -> None:
+    """Validate that date arguments format is YYYY-MM-DD that program expects to properly function. 
+       If not, stops execution.
+
+    :param date: The date to be validated.
+    :return: None
+    """      
     try:
-        return datetime.strptime(input_date, '%Y-%m-%d').date()
+        return datetime.strptime(date, '%Y-%m-%d').date()
     except ValueError:
         raise ValueError("Incorrect data format, should be YYYY-MM-DD")
 
 
 def validate_date_ranges(start_date: str, end_date: str) -> None:
+    """Validate that end_date is equal or bigger than start_date so API call don't break.
+
+    :param start_time: The start date.
+    :param end_time: The end_date.
+    :return: None
+    """      
     if(start_date > end_date):
         raise Exception(f"end_date (current value {end_date}) should be bigger than start_date (current value {start_date})")
 
 
 def send_email (message: str) -> None:
+    """Sends email to confugured reciever. 
+
+    :param message: Email subject & body.
+    :return: None
+    """        
     context = ssl.create_default_context()
     with smtplib.SMTP_SSL(cfg.email["smtp_server"], cfg.email["port"], context=context) as server:
         server.login(cfg.email["sender_email"], cfg.email["password"])
@@ -53,16 +77,23 @@ def send_email (message: str) -> None:
 
 
 def collect_api_data(**kwargs: dict) -> None:
-    """
-    get api data from https://api.nasa.gov/neo/rest/v1/feed?start_date=2022-03-08&end_date=2022-03-09&api_key=DEMO_KEY
-    for last 4 days
-    """
+    """Collect data from NeoWs (Near Earth Object Web Service) of NASA for near earth Asteroid information.
 
+    Links:
+        NASA APIs: https://api.nasa.gov/
+        NEO Service endpoint:  https://api.nasa.gov/neo/rest/v1/feed?start_date=YYYY-MM-DD&end_date=YYYY-MM-DD&api_key=API_KEY
+
+    Functionality:
+        Collect data for last 3 days unless dag is triggered with date configuration, e.g. {"start_date": "2022-07-27", "end_date":"2022-07-29"}.
+        API response is saved in JSON file.
+
+    :param kwargs: Dict with Airflow build-in variables and user arguments if provided.
+    :return: None
+    """        
     try:
-
         start_time = time.time()
 
-        # accept date arguments if both provided, otherwise load last 3 days dynamically
+        # Use user date arguments if both provided, otherwise load last 3 days dynamically
         try:
             start_date = kwargs["dag_run"].conf["start_date"]
             end_date = kwargs["dag_run"].conf["end_date"]
@@ -71,7 +102,7 @@ def collect_api_data(**kwargs: dict) -> None:
 
             execution_date = kwargs['ds']
 
-            # convert str to date object to calculate dynamic past dates, then convert again to str to pass to application
+            # Convert str to date object to calculate dynamic past dates, then convert again to str to pass to application
             execution_date_object = datetime.strptime(execution_date, "%Y-%m-%d")
 
             start_date_object = execution_date_object - timedelta(days=2)
@@ -82,11 +113,12 @@ def collect_api_data(**kwargs: dict) -> None:
 
         requests_cache.install_cache(cfg.absolute_paths["cache_abs_path"])
 
+        # Validate date ranges and format
         validate_date_format(start_date)
         validate_date_format(end_date)
-
         validate_date_ranges(start_date, end_date)
 
+        # Prepare api payload
         url = cfg.nasa_neo_api["url"]
 
         params = {
@@ -95,6 +127,7 @@ def collect_api_data(**kwargs: dict) -> None:
             "api_key": cfg.nasa_neo_api["api_key"]
         }
 
+        # Request api data and store them in variable in json form
         api_response = requests.get(url=url, params=params, timeout=120)
         data = api_response.json()
 
@@ -102,6 +135,7 @@ def collect_api_data(**kwargs: dict) -> None:
 
         dict_list = []
 
+        # Retrieve attributes from api response by iterating response objects and store them to list of dictionaries
         for key, value in data["near_earth_objects"].items():
 
             date = key
@@ -116,6 +150,7 @@ def collect_api_data(**kwargs: dict) -> None:
                 velocity_in_km_per_hour = row["close_approach_data"][0]["relative_velocity"]["kilometers_per_hour"]
                 lunar_distance = row["close_approach_data"][0]["miss_distance"]["lunar"]
 
+                # Temporary dict that holds current row data, will be appended to dict list and overwritten in next row iteration 
                 _dict = {
                     'date': date,
                     'neo_reference_id': neo_reference_id,
@@ -132,6 +167,7 @@ def collect_api_data(**kwargs: dict) -> None:
 
         # print(json.dumps(dict_list, indent=2))
 
+        # Persist api data dict created above to JSON file, so it can be further processed downstream
         with open(cfg.absolute_paths["json_abs_path"], 'w') as file:
             json.dump(dict_list, file, indent=4)
 
@@ -140,25 +176,28 @@ def collect_api_data(**kwargs: dict) -> None:
 
     except Exception as e:
 
+        # Force Airflow task to fail so all downstream tasks won't execute
         raise AirflowException({e})
 
 
 def transform_and_write_to_parquet() -> None:
+    """Process with Spark json file from API response, create field 'velocity_in_miles_per_hour' and store output to parquet file.
 
+    :param: None
+    :return: None
+    """        
     try:
         start_time = time.time()
 
         global spark
 
-        nasa_neo_df = spark.read.option("multiline", "true").json(
-            cfg.absolute_paths["json_abs_path"])
+        nasa_neo_df = spark.read.option("multiline", "true").json(cfg.absolute_paths["json_abs_path"])
 
         cached_nasa_neo_df = nasa_neo_df.cache()
 
         nasa_neo_transformed_df = cached_nasa_neo_df.withColumn("velocity_in_miles_per_hour", col("velocity_in_km_per_hour") * 0.621371)
 
-        nasa_neo_transformed_df.write.mode('overwrite').partitionBy(
-            "date").parquet(cfg.absolute_paths["parquet_abs_path"])
+        nasa_neo_transformed_df.write.mode('overwrite').partitionBy("date").parquet(cfg.absolute_paths["parquet_abs_path"])
 
         nasa_neo_df.unpersist()
 
@@ -167,11 +206,16 @@ def transform_and_write_to_parquet() -> None:
 
     except Exception as e:
 
+        # Force Airflow task to fail so all downstream tasks won't execute
         raise AirflowException({e})
 
 
 def load_parquet_to_mongodb_staging() -> None:
+    """With Spark read parquet file and store it mongodb staging collection.
 
+    :param: None
+    :return: None
+    """     
     try:
         start_time = time.time()
 
@@ -190,11 +234,16 @@ def load_parquet_to_mongodb_staging() -> None:
 
     except Exception as e:
 
+        # Force Airflow task to fail so all downstream tasks won't execute
         raise AirflowException({e})
 
 
 def populate_mongodb_production() -> None:
+    """Populate mongodb production collection with staging documents.
 
+    :param: None
+    :return: None
+    """   
     try:
         start_time = time.time()
 
@@ -206,16 +255,17 @@ def populate_mongodb_production() -> None:
 
             staging_documents = []
 
-            # create dict list with stage documents
+            # Create list of dictionaries from staging documents
             for doc in staging_collection.find():
                 staging_documents.append(doc)
 
-            # delete prod documents that exist on stage, use unique key: date & neo_reference_id
+            # Delete production documents that exist on stageing to avoid duplicates, since all staging documents will be loaded
+            # unique key: date & neo_reference_id
             for row in staging_documents:
                 production_collection.delete_one(
                     {"date": row["date"], "neo_reference_id": row["neo_reference_id"]})
 
-            # load stage records to prod
+            # Load all stage documents to prod
             production_collection.insert_many(staging_documents)
 
         end_time = time.time()
@@ -223,14 +273,20 @@ def populate_mongodb_production() -> None:
 
     except Exception as e:
 
+        # Force Airflow task to fail so all downstream tasks won't execute
         raise AirflowException({e})
 
 
 def send_success_notification(**kwargs: dict) -> None:
+    """Prepares email subject & body with dynamic Airflow variables and calls send_email() to deliver it.
 
-    start_time = time.time()
+    :param kwargs: Dict with Airflow build-in variables and user arguments if provided.
+    :return: None
+    """   
+    try:
+        start_time = time.time()
 
-    message = f"""\
+        message = f"""\
 Subject: Airflow Success Notification: Dag Run 
 
 dag_run: {kwargs["dag_run"]}
@@ -241,7 +297,12 @@ params: {kwargs["params"]}
 
 """
 
-    send_email(message)
+        send_email(message)
 
-    end_time = time.time()
-    log_task_duration(start_time, end_time)
+        end_time = time.time()
+        log_task_duration(start_time, end_time)
+
+    except Exception as e:
+
+        # Force Airflow task to fail so all downstream tasks won't execute
+        raise AirflowException({e})
