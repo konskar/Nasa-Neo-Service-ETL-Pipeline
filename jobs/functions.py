@@ -1,6 +1,7 @@
 
 # Standard library imports
 from datetime import datetime, timedelta
+from doctest import Example
 import json
 import time
 
@@ -19,13 +20,6 @@ from nasa_neo_service_etl_dag.configs import etl_config as cfg
 
 # Initialize objects
 task_logger = logging.getLogger('airflow.task')
-
-spark = SparkSession \
-    .builder \
-    .appName(cfg.spark["app_name"]) \
-    .master('local[*]') \
-    .config("spark.jars.packages", "org.mongodb.spark:mongo-spark-connector_2.12:3.0.1") \
-    .getOrCreate()
 
 # Functions deceleration
 
@@ -76,7 +70,7 @@ def send_email (message: str) -> None:
         server.sendmail(cfg.email["sender_email"],  cfg.email["receiver_email"], message)
 
 
-def collect_api_data(**kwargs: dict) -> None:
+def collect_api_data(start_date: str = None, end_date: str = None, **kwargs: dict) -> None:
     """Collect data from NeoWs (Near Earth Object Web Service) of NASA for near earth Asteroid information.
 
     Links:
@@ -84,7 +78,8 @@ def collect_api_data(**kwargs: dict) -> None:
         NEO Service endpoint:  https://api.nasa.gov/neo/rest/v1/feed?start_date=YYYY-MM-DD&end_date=YYYY-MM-DD&api_key=API_KEY
 
     Functionality:
-        Collect data for last 3 days unless dag is triggered with date configuration, e.g. {"start_date": "2022-07-27", "end_date":"2022-07-29"}.
+        Collect data for last 3 days unless function is invoked externally 
+        or dag is triggered with date configuration e.g. {"start_date": "2022-07-27", "end_date":"2022-07-29"}
         API response is saved in JSON file.
 
     :param kwargs: Dict with Airflow build-in variables and user arguments if provided.
@@ -93,23 +88,36 @@ def collect_api_data(**kwargs: dict) -> None:
     try:
         start_time = time.time()
 
-        # Use user date arguments if both provided, otherwise load last 3 days dynamically
+        # Use Airflow config date arguments if provided, function arguments if provided, 
+        # or otherwise load last 3 days dynamically
+        
+        # Airflow config date arguments
         try:
             start_date = kwargs["dag_run"].conf["start_date"]
             end_date = kwargs["dag_run"].conf["end_date"]
 
         except KeyError:
 
-            execution_date = kwargs['ds']
+            # Function arguments, need them to invoke function for unit testing. Both arguments should be provided
+            try:
+                if (start_date is None or end_date is None):
+                    raise ValueError('Not both function arguments provided')
+                
+                start_date = start_date
+                end_date = end_date
 
-            # Convert str to date object to calculate dynamic past dates, then convert again to str to pass to application
-            execution_date_object = datetime.strptime(execution_date, "%Y-%m-%d")
+            # If above conditions aren't met, load last 3 days dynamically
+            except ValueError:
+                execution_date = kwargs['ds']
 
-            start_date_object = execution_date_object - timedelta(days=2)
-            start_date = start_date_object.strftime("%Y-%m-%d")
+                # Convert str to date object to calculate dynamic past dates, then convert again to str to pass to application
+                execution_date_object = datetime.strptime(execution_date, "%Y-%m-%d")
 
-            end_date_object = execution_date_object - timedelta(days=0)
-            end_date = end_date_object.strftime("%Y-%m-%d")
+                start_date_object = execution_date_object - timedelta(days=2)
+                start_date = start_date_object.strftime("%Y-%m-%d")
+
+                end_date_object = execution_date_object - timedelta(days=0)
+                end_date = end_date_object.strftime("%Y-%m-%d")
 
         requests_cache.install_cache(cfg.absolute_paths["cache_abs_path"])
 
@@ -189,7 +197,11 @@ def transform_and_write_to_parquet() -> None:
     try:
         start_time = time.time()
 
-        global spark
+        spark = SparkSession \
+                .builder \
+                .appName(cfg.spark["app_name"]) \
+                .master('local[*]') \
+                .getOrCreate()
 
         nasa_neo_df = spark.read.option("multiline", "true").json(cfg.absolute_paths["json_abs_path"])
 
@@ -200,6 +212,8 @@ def transform_and_write_to_parquet() -> None:
         nasa_neo_transformed_df.write.mode('overwrite').partitionBy("date").parquet(cfg.absolute_paths["parquet_abs_path"])
 
         nasa_neo_df.unpersist()
+
+        spark.stop()
 
         end_time = time.time()
         log_task_duration(start_time, end_time)
@@ -219,7 +233,12 @@ def load_parquet_to_mongodb_staging() -> None:
     try:
         start_time = time.time()
 
-        global spark
+        spark = SparkSession \
+                .builder \
+                .appName(cfg.spark["app_name"]) \
+                .master('local[*]') \
+                .config("spark.jars.packages", "org.mongodb.spark:mongo-spark-connector_2.12:3.0.1") \
+                .getOrCreate()
 
         nasa_neo_df = spark.read.parquet(cfg.absolute_paths["parquet_abs_path"])
 
@@ -228,6 +247,8 @@ def load_parquet_to_mongodb_staging() -> None:
             .option("database", cfg.mongo_db["database"]) \
             .option("collection", cfg.mongo_db["staging_collection"]) \
             .save()
+
+        spark.stop()
 
         end_time = time.time()
         log_task_duration(start_time, end_time)
