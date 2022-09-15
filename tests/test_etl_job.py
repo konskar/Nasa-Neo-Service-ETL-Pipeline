@@ -96,6 +96,40 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(input_sum_of_velocity_in_km_per_hour, expected_sum_of_velocity_in_km_per_hour)
 
 
+    def test_sum_of_estimated_diameter_min_in_km(self):
+
+        expected_sum_of_estimated_diameter_min_in_km = (
+            expected_df
+            .agg(sum('estimated_diameter_min_in_km').alias('sum_estimated_diameter_min_in_km'))
+            .collect()[0]
+            ['sum_estimated_diameter_min_in_km'])
+        
+        input_sum_of_estimated_diameter_min_in_km = (
+            input_df
+            .agg(sum('estimated_diameter_min_in_km').alias('sum_estimated_diameter_min_in_km'))
+            .collect()[0]
+            ['sum_estimated_diameter_min_in_km'])
+
+        self.assertEqual(input_sum_of_estimated_diameter_min_in_km, expected_sum_of_estimated_diameter_min_in_km)
+    
+
+    def test_sum_of_estimated_diameter_max_in_km(self):
+
+        expected_sum_of_estimated_diameter_max_in_km = (
+            expected_df
+            .agg(sum('estimated_diameter_max_in_km').alias('sum_estimated_diameter_max_in_km'))
+            .collect()[0]
+            ['sum_estimated_diameter_max_in_km'])
+        
+        input_sum_of_estimated_diameter_max_in_km = (
+            input_df
+            .agg(sum('estimated_diameter_max_in_km').alias('sum_estimated_diameter_max_in_km'))
+            .collect()[0]
+            ['sum_estimated_diameter_max_in_km'])
+
+        self.assertEqual(input_sum_of_estimated_diameter_max_in_km, expected_sum_of_estimated_diameter_max_in_km)
+
+
 if __name__ == '__main__':
 
     setUp()
