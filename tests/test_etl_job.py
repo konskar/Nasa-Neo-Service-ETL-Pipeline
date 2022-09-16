@@ -23,7 +23,13 @@ import functions as f
 def setUp():
     """Start Spark, define config and path to test data
     """
-    global spark, input_df, expected_df
+    global spark, input_df, expected_df, expected_transformed_df
+
+    # generate input_df: Retrieve API data for the same period with the same schema as test file
+    f.collect_api_data(start_date= '2022-07-27', end_date='2022-07-31', api_response_path = cfg.absolute_paths["api_produced_dataset_abs_path"])
+    
+    # generate input parquet from test dataset 
+    f.transform_and_write_to_parquet(api_response_path = cfg.absolute_paths["api_produced_dataset_abs_path"], parquet_path = cfg.absolute_paths["parquet_produced_dataset_abs_path"])
 
     spark = SparkSession \
         .builder \
@@ -31,12 +37,13 @@ def setUp():
         .master('local[*]') \
         .getOrCreate()
 
-    # expected_df: Data we have tested their schema and content
+    # Data we have tested their schema and content
     expected_df = spark.read.option("multiline", "true").json(cfg.absolute_paths["api_test_dataset_abs_path"])
 
-    # input_df: Retrieve API data for the same period with the same schema as test file
-    f.collect_api_data(start_date= '2022-07-27', end_date='2022-07-31')
-    input_df = spark.read.option("multiline", "true").json(cfg.absolute_paths["json_abs_path"])
+    # generate input_df: Retrieve API data for the same period with the same schema as test file
+    input_df = spark.read.option("multiline", "true").json(cfg.absolute_paths["api_produced_dataset_abs_path"])
+
+    expected_transformed_df = spark.read.parquet(cfg.absolute_paths["parquet_produced_dataset_abs_path"])
 
 def tearDown():
     """Stop Spark

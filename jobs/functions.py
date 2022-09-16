@@ -70,7 +70,7 @@ def send_email (message: str) -> None:
         server.sendmail(cfg.email["sender_email"],  cfg.email["receiver_email"], message)
 
 
-def collect_api_data(start_date: str = None, end_date: str = None, **kwargs: dict) -> None:
+def collect_api_data(start_date: str = None, end_date: str = None, api_response_path : str = cfg.absolute_paths["json_abs_path"], **kwargs: dict) -> None:
     """Collect data from NeoWs (Near Earth Object Web Service) of NASA for near earth Asteroid information.
 
     Links:
@@ -176,7 +176,7 @@ def collect_api_data(start_date: str = None, end_date: str = None, **kwargs: dic
         # print(json.dumps(dict_list, indent=2))
 
         # Persist api data dict created above to JSON file, so it can be further processed downstream
-        with open(cfg.absolute_paths["json_abs_path"], 'w') as file:
+        with open(api_response_path, 'w') as file:
             json.dump(dict_list, file, indent=4)
 
         end_time = time.time()
@@ -188,7 +188,7 @@ def collect_api_data(start_date: str = None, end_date: str = None, **kwargs: dic
         raise AirflowException({e})
 
 
-def transform_and_write_to_parquet() -> None:
+def transform_and_write_to_parquet(api_response_path : str =cfg.absolute_paths["json_abs_path"], parquet_path : str = cfg.absolute_paths["parquet_abs_path"]) -> None:
     """Process with Spark json file from API response, create field 'velocity_in_miles_per_hour' and store output to parquet file.
 
     :param: None
@@ -203,13 +203,13 @@ def transform_and_write_to_parquet() -> None:
                 .master('local[*]') \
                 .getOrCreate()
 
-        nasa_neo_df = spark.read.option("multiline", "true").json(cfg.absolute_paths["json_abs_path"])
+        nasa_neo_df = spark.read.option("multiline", "true").json(api_response_path)
 
         cached_nasa_neo_df = nasa_neo_df.cache()
 
         nasa_neo_transformed_df = cached_nasa_neo_df.withColumn("velocity_in_miles_per_hour", col("velocity_in_km_per_hour") * 0.621371)
 
-        nasa_neo_transformed_df.write.mode('overwrite').partitionBy("date").parquet(cfg.absolute_paths["parquet_abs_path"])
+        nasa_neo_transformed_df.write.mode('overwrite').partitionBy("date").parquet(parquet_path)
 
         nasa_neo_df.unpersist()
 
