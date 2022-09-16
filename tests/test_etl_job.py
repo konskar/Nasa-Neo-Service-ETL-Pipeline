@@ -32,8 +32,7 @@ def setUp():
         .getOrCreate()
 
     # expected_df: Data we have tested their schema and content
-    expected_df_path = os.path.join(cfg.airflow["project_path"], 'tests/test_data', 'nasa_neo_api_response_27.07.2022-31.07.2022.json')
-    expected_df = spark.read.option("multiline", "true").json(expected_df_path)
+    expected_df = spark.read.option("multiline", "true").json(cfg.absolute_paths["api_test_dataset_abs_path"])
 
     # input_df: Retrieve API data for the same period with the same schema as test file
     f.collect_api_data(start_date= '2022-07-27', end_date='2022-07-31')

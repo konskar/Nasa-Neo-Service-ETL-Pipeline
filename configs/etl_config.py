@@ -40,12 +40,17 @@ email = {
     "smtp_server" : os.getenv('SMTP_SERVER'),
     "sender_email" : os.getenv('SMTP_SENDER_EMAIL'),
     "password" : os.getenv('SMTP_PASSWORD'),
-    "receiver_email_list" : [os.getenv('SMTP_RECIEVER_EMAIL_USER_A'), os.getenv('SMTP_RECIEVER_EMAIL_USER_B')],
-    "receiver_email" : os.getenv('SMTP_RECIEVER_EMAIL_USER_A'),
+    "receiver_email_list" : [os.getenv('SMTP_RECEIVER_EMAIL_USER_A'), os.getenv('SMTP_RECEIVER_EMAIL_USER_B')],
+    "receiver_email" : os.getenv('SMTP_RECEIVER_EMAIL_USER_A'),
+}
+
+testing = {
+    "api_dataset": os.getenv('API_TEST_DATASET')
 }
 
 absolute_paths = {
     "json_abs_path": os.path.join(airflow["project_path"], nasa_neo_api["json_file"]),
     "cache_abs_path": os.path.join(airflow["project_path"], nasa_neo_api["cache"]),
-    "parquet_abs_path": os.path.join(airflow["project_path"], spark["parquet_path"])
+    "parquet_abs_path": os.path.join(airflow["project_path"], spark["parquet_path"]),
+    "api_test_dataset_abs_path": os.path.join(airflow["project_path"], testing["api_dataset"])
 }
