@@ -3,6 +3,7 @@ from audioop import avg
 import unittest
 import os
 import sys
+import hashlib
 
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, sum, avg
@@ -30,7 +31,7 @@ def setUp():
         .master('local[*]') \
         .getOrCreate()
 
-    # expected_df: Data we have tested theor schema and content
+    # expected_df: Data we have tested their schema and content
     expected_df_path = os.path.join(cfg.airflow["project_path"], 'tests/test_data', 'nasa_neo_api_response_27.07.2022-31.07.2022.json')
     expected_df = spark.read.option("multiline", "true").json(expected_df_path)
 
@@ -50,6 +51,12 @@ class TestAPI(unittest.TestCase):
     """
 
 	# Test cases
+    def test_schema(self):
+        expected_df_schema = expected_df.schema
+        input_df_schema = input_df.schema
+
+        self.assertEqual(input_df_schema, expected_df_schema)
+
     def test_column_count(self):
         expected_cols = len(expected_df.columns)
         input_cols = len(input_df.columns)
@@ -69,14 +76,12 @@ class TestAPI(unittest.TestCase):
         expected_average_lunar_distance = (
             expected_df
             .agg(avg('lunar_distance').alias('average_lunar_distance'))
-            .collect()[0]
-            ['average_lunar_distance'])
+            .collect()[0]['average_lunar_distance'])
         
         input_average_lunar_distance = (
             input_df
             .agg(avg('lunar_distance').alias('average_lunar_distance'))
-            .collect()[0]
-            ['average_lunar_distance'])
+            .collect()[0]['average_lunar_distance'])
 
         self.assertEqual(input_average_lunar_distance, expected_average_lunar_distance)
 
@@ -84,14 +89,12 @@ class TestAPI(unittest.TestCase):
         expected_sum_of_velocity_in_km_per_hour = (
             expected_df
             .agg(sum('velocity_in_km_per_hour').alias('sum_velocity_in_km_per_hour'))
-            .collect()[0]
-            ['sum_velocity_in_km_per_hour'])
+            .collect()[0]['sum_velocity_in_km_per_hour'])
         
         input_sum_of_velocity_in_km_per_hour = (
             input_df
             .agg(sum('velocity_in_km_per_hour').alias('sum_velocity_in_km_per_hour'))
-            .collect()[0]
-            ['sum_velocity_in_km_per_hour'])
+            .collect()[0]['sum_velocity_in_km_per_hour'])
         
         self.assertEqual(input_sum_of_velocity_in_km_per_hour, expected_sum_of_velocity_in_km_per_hour)
 
@@ -101,14 +104,12 @@ class TestAPI(unittest.TestCase):
         expected_sum_of_estimated_diameter_min_in_km = (
             expected_df
             .agg(sum('estimated_diameter_min_in_km').alias('sum_estimated_diameter_min_in_km'))
-            .collect()[0]
-            ['sum_estimated_diameter_min_in_km'])
+            .collect()[0]['sum_estimated_diameter_min_in_km'])
         
         input_sum_of_estimated_diameter_min_in_km = (
             input_df
             .agg(sum('estimated_diameter_min_in_km').alias('sum_estimated_diameter_min_in_km'))
-            .collect()[0]
-            ['sum_estimated_diameter_min_in_km'])
+            .collect()[0]['sum_estimated_diameter_min_in_km'])
 
         self.assertEqual(input_sum_of_estimated_diameter_min_in_km, expected_sum_of_estimated_diameter_min_in_km)
     
@@ -118,16 +119,24 @@ class TestAPI(unittest.TestCase):
         expected_sum_of_estimated_diameter_max_in_km = (
             expected_df
             .agg(sum('estimated_diameter_max_in_km').alias('sum_estimated_diameter_max_in_km'))
-            .collect()[0]
-            ['sum_estimated_diameter_max_in_km'])
+            .collect()[0]['sum_estimated_diameter_max_in_km'])
         
         input_sum_of_estimated_diameter_max_in_km = (
             input_df
             .agg(sum('estimated_diameter_max_in_km').alias('sum_estimated_diameter_max_in_km'))
-            .collect()[0]
-            ['sum_estimated_diameter_max_in_km'])
+            .collect()[0]['sum_estimated_diameter_max_in_km'])
 
         self.assertEqual(input_sum_of_estimated_diameter_max_in_km, expected_sum_of_estimated_diameter_max_in_km)
+
+
+    def test_dimension_count(self):
+        expected_df_agg = expected_df.groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid").count()
+        expected_df_agg_md5_hash = hashlib.md5(str(expected_df_agg.collect()).encode('utf-8')).hexdigest()
+
+        input_df_agg = input_df.groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid").count()
+        input_df_agg_md5_hash = hashlib.md5(str(input_df_agg.collect()[0:]).encode('utf-8')).hexdigest()
+
+        self.assertEqual(input_df_agg_md5_hash, expected_df_agg_md5_hash)
 
 
 if __name__ == '__main__':
