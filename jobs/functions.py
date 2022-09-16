@@ -108,7 +108,6 @@ def collect_api_data(start_date: str = None, end_date: str = None, **kwargs: dic
 
             # If above conditions aren't met, load last 3 days dynamically
             except ValueError:
-                # execution_date = kwargs['ds']
                 execution_date = kwargs["dag_run"].start_date.strftime("%Y-%m-%d")
 
                 # Convert str to date object to calculate dynamic past dates, then convert again to str to pass to application
