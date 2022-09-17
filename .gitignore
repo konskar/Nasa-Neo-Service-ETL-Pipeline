@@ -11,3 +11,4 @@
 /venv
 /__pycache__
 tests/__pycache__
+tests/produced_datasets/*
