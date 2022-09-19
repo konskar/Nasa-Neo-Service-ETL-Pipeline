@@ -188,7 +188,7 @@ def collect_api_data(start_date: str = None, end_date: str = None, api_response_
         raise AirflowException({e})
 
 
-def transform_and_write_to_parquet(api_response_path : str =cfg.absolute_paths["json_abs_path"], parquet_path : str = cfg.absolute_paths["parquet_abs_path"]) -> None:
+def transform_and_write_to_parquet(api_response_path : str = cfg.absolute_paths["json_abs_path"], parquet_path : str = cfg.absolute_paths["parquet_abs_path"]) -> None:
     """Process with Spark json file from API response, create field 'velocity_in_miles_per_hour' and store output to parquet file.
 
     :param: None
