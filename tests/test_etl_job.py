@@ -7,6 +7,7 @@ import hashlib
 
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, sum, avg
+from pyspark.sql.types import DecimalType
 
 file_path = os.path.dirname( __file__ )
 
@@ -143,6 +144,32 @@ class TestAPI(unittest.TestCase):
         input_df_agg_md5_hash = hashlib.md5(str(input_df_agg.collect()[0:]).encode('utf-8')).hexdigest()
 
         self.assertEqual(input_df_agg_md5_hash, expected_df_agg_md5_hash)
+
+class TestTransformation(unittest.TestCase):
+    """Unit tests for Spark Transformation 
+    """
+
+    # Test cases
+    def test_velocity_conversion_to_miles(self):
+        velocity_in_km_per_hour = expected_transformed_df.withColumn("velocity_in_km_per_hour_double",col("velocity_in_km_per_hour").cast("double")).groupBy().sum("velocity_in_km_per_hour_double").collect()[0][0]
+        velocity_in_miles_per_hour = expected_transformed_df.withColumn("velocity_in_miles_per_hour_double",col("velocity_in_miles_per_hour").cast("double")).groupBy().sum("velocity_in_miles_per_hour_double").collect()[0][0]
+
+        self.assertEqual(float("{:.8f}".format(velocity_in_km_per_hour * 0.621371)), float("{:.8f}".format(velocity_in_miles_per_hour)))
+
+    def test_row_count(self):
+
+        # rows between original and transformed df should match
+        primary_df_rows = expected_df.count()
+        transformed_df_rows = expected_transformed_df.count()
+
+        self.assertEqual(primary_df_rows, transformed_df_rows)
+
+    def test_column_count(self):
+
+        # transformed df has one new column
+        primary_df_cols = len(expected_df.columns)
+        transformed_df_cols = len(expected_transformed_df.columns)
+        self.assertEqual(primary_df_cols, transformed_df_cols - 1)
 
 
 if __name__ == '__main__':
