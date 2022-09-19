@@ -6,8 +6,8 @@ import sys
 import hashlib
 
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, sum, avg
-from pyspark.sql.types import DecimalType
+from pyspark.sql.functions import col, sum, avg, desc
+from pyspark.sql.types import DoubleType, IntegerType, DateType, DecimalType
 
 file_path = os.path.dirname( __file__ )
 
@@ -170,6 +170,40 @@ class TestTransformation(unittest.TestCase):
         primary_df_cols = len(expected_df.columns)
         transformed_df_cols = len(expected_transformed_df.columns)
         self.assertEqual(primary_df_cols, transformed_df_cols - 1)
+
+    def test_dimension_count(self):
+
+        primary_df_agg = expected_df.groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid") \
+            .count() \
+            .sort("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid")
+
+        primary_df_agg_md5_hash = hashlib.md5(str(primary_df_agg.collect()).encode('utf-8')).hexdigest()
+
+        transformed_df_agg = expected_transformed_df.withColumn("date",col("date").cast("string")) \
+            .groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid") \
+            .count() \
+            .sort("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid")
+
+        transformed_df_agg_md5_hash = hashlib.md5(str(transformed_df_agg.collect()[0:]).encode('utf-8')).hexdigest()
+        
+        self.assertEqual(primary_df_agg_md5_hash, transformed_df_agg_md5_hash)
+
+    def test_metrics_sum_per_date(self):
+
+        primary_df_velocity_in_km_per_hour= expected_df.agg(sum("velocity_in_km_per_hour")).collect()[0][0]
+        primary_df_estimated_diameter_min_in_km= expected_df.agg(sum("estimated_diameter_min_in_km")).collect()[0][0]
+        primary_df_estimated_diameter_max_in_km= expected_df.agg(sum("estimated_diameter_max_in_km")).collect()[0][0]
+        primary_df_lunar_distance= expected_df.agg(sum("lunar_distance")).collect()[0][0]
+
+        transformed_df_velocity_in_km_per_hour=expected_transformed_df.agg(sum("velocity_in_km_per_hour")).collect()[0][0]
+        transformed_df_estimated_diameter_min_in_km= expected_transformed_df.agg(sum("estimated_diameter_min_in_km")).collect()[0][0]
+        transformed_df_estimated_diameter_max_in_km= expected_transformed_df.agg(sum("estimated_diameter_max_in_km")).collect()[0][0]
+        transformed_df_lunar_distance= expected_transformed_df.agg(sum("lunar_distance")).collect()[0][0]
+
+        self.assertEqual(float("{:.3f}".format(primary_df_velocity_in_km_per_hour)), float("{:.3f}".format(transformed_df_velocity_in_km_per_hour)))
+        self.assertEqual(float("{:.3f}".format(primary_df_estimated_diameter_min_in_km)), float("{:.3f}".format(transformed_df_estimated_diameter_min_in_km)))
+        self.assertEqual(float("{:.3f}".format(primary_df_estimated_diameter_max_in_km)), float("{:.3f}".format(transformed_df_estimated_diameter_max_in_km)))
+        self.assertEqual(float("{:.3f}".format(primary_df_lunar_distance)), float("{:.3f}".format(transformed_df_lunar_distance)))
 
 
 if __name__ == '__main__':
