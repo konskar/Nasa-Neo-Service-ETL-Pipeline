@@ -64,20 +64,24 @@ class TestAPI(unittest.TestCase):
 
         self.assertEqual(input_df_schema, expected_df_schema)
 
+
     def test_column_count(self):
         expected_cols = len(expected_df.columns)
         input_cols = len(input_df.columns)
         self.assertEqual(input_cols, expected_cols)
+
 
     def test_row_count(self):
         expected_rows = expected_df.count()
         input_rows = input_df.count()
         self.assertEqual(input_rows, expected_rows)
 
+
     def test_column_names(self):
         expected_columns = expected_df.columns
         input_columns = input_df.columns
         self.assertEqual(input_columns, expected_columns)
+
 
     def test_average_lunar_distance(self):
         expected_average_lunar_distance = (
@@ -91,6 +95,7 @@ class TestAPI(unittest.TestCase):
             .collect()[0]['average_lunar_distance'])
 
         self.assertEqual(input_average_lunar_distance, expected_average_lunar_distance)
+
 
     def test_sum_of_velocity_in_km_per_hour(self):
         expected_sum_of_velocity_in_km_per_hour = (
@@ -156,6 +161,7 @@ class TestTransformation(unittest.TestCase):
 
         self.assertEqual(float("{:.8f}".format(velocity_in_km_per_hour * 0.621371)), float("{:.8f}".format(velocity_in_miles_per_hour)))
 
+
     def test_row_count(self):
 
         # rows between original and transformed df should match
@@ -164,12 +170,14 @@ class TestTransformation(unittest.TestCase):
 
         self.assertEqual(primary_df_rows, transformed_df_rows)
 
+
     def test_column_count(self):
 
         # transformed df has one new column
         primary_df_cols = len(expected_df.columns)
         transformed_df_cols = len(expected_transformed_df.columns)
         self.assertEqual(primary_df_cols, transformed_df_cols - 1)
+
 
     def test_dimension_count(self):
 
@@ -179,6 +187,7 @@ class TestTransformation(unittest.TestCase):
 
         primary_df_agg_md5_hash = hashlib.md5(str(primary_df_agg.collect()).encode('utf-8')).hexdigest()
 
+        # convert date from date type to string to match schemas since hash function takes it into account
         transformed_df_agg = expected_transformed_df.withColumn("date",col("date").cast("string")) \
             .groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid") \
             .count() \
@@ -188,7 +197,8 @@ class TestTransformation(unittest.TestCase):
         
         self.assertEqual(primary_df_agg_md5_hash, transformed_df_agg_md5_hash)
 
-    def test_metrics_sum_per_date(self):
+
+    def test_metrics_sum(self):
 
         primary_df_velocity_in_km_per_hour= expected_df.agg(sum("velocity_in_km_per_hour")).collect()[0][0]
         primary_df_estimated_diameter_min_in_km= expected_df.agg(sum("estimated_diameter_min_in_km")).collect()[0][0]
