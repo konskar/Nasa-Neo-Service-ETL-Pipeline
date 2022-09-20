@@ -199,7 +199,8 @@ def transform_and_write_to_parquet(api_response_path : str = cfg.absolute_paths[
 
         spark = SparkSession \
                 .builder \
-                .appName(cfg.spark["app_name"]) \
+                .appName("nasa_gov_etl | transform_and_write_to_parquet") \
+                .config("spark.jars.packages", "org.mongodb.spark:mongo-spark-connector_2.12:3.0.1") \
                 .master('local[*]') \
                 .getOrCreate()
 
@@ -224,7 +225,7 @@ def transform_and_write_to_parquet(api_response_path : str = cfg.absolute_paths[
         raise AirflowException({e})
 
 
-def load_parquet_to_mongodb_staging() -> None:
+def load_parquet_to_mongodb_staging(database : str = cfg.mongo_db["database"], staging_collection : str = cfg.mongo_db["staging_collection"], parquet_path : str = cfg.absolute_paths["parquet_abs_path"]) -> None:
     """With Spark read parquet file and store it mongodb staging collection.
 
     :param: None
@@ -235,17 +236,17 @@ def load_parquet_to_mongodb_staging() -> None:
 
         spark = SparkSession \
                 .builder \
-                .appName(cfg.spark["app_name"]) \
-                .master('local[*]') \
+                .appName("nasa_gov_etl | load_parquet_to_mongodb_staging") \
                 .config("spark.jars.packages", "org.mongodb.spark:mongo-spark-connector_2.12:3.0.1") \
+                .master('local[*]') \
                 .getOrCreate()
 
-        nasa_neo_df = spark.read.parquet(cfg.absolute_paths["parquet_abs_path"])
+        nasa_neo_df = spark.read.parquet(parquet_path)
 
         nasa_neo_df.write.format("mongo").mode("overwrite") \
             .option("uri", cfg.mongo_db["url"]) \
-            .option("database", cfg.mongo_db["database"]) \
-            .option("collection", cfg.mongo_db["staging_collection"]) \
+            .option("database", database) \
+            .option("collection", staging_collection) \
             .save()
 
         spark.stop()

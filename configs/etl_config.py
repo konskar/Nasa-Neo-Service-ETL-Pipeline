@@ -47,7 +47,10 @@ email = {
 testing = {
     "api_test_dataset": os.getenv('API_TEST_DATASET'),
     "api_produced_dataset": os.getenv('API_PRODUCED_DATASET'),
-    "parquet_produced_dataset": os.getenv('PARQUET_PRODUCED_DATASET')
+    "parquet_produced_dataset": os.getenv('PARQUET_PRODUCED_DATASET'),
+    "test_database": os.getenv('MONGODB_TEST_DATABASE'),
+    "test_staging_collection": os.getenv('MONGODB_TEST_STAGING_COLLECTION'),
+    "test_production_collection": os.getenv('MONGODB_TEST_PRODUCTION_COLLECTION')    
 }
 
 absolute_paths = {
