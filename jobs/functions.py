@@ -70,7 +70,12 @@ def send_email (message: str) -> None:
         server.sendmail(cfg.email["sender_email"],  cfg.email["receiver_email"], message)
 
 
-def collect_api_data(start_date: str = None, end_date: str = None, api_response_path : str = cfg.absolute_paths["json_abs_path"], **kwargs: dict) -> None:
+def collect_api_data( \
+                        start_date: str = None, 
+                        end_date: str = None, 
+                        api_response_path : str = cfg.absolute_paths["json_abs_path"], 
+                        **kwargs: dict
+                    ) -> None:
     """Collect data from NeoWs (Near Earth Object Web Service) of NASA for near earth Asteroid information.
 
     Links:
@@ -188,7 +193,10 @@ def collect_api_data(start_date: str = None, end_date: str = None, api_response_
         raise AirflowException({e})
 
 
-def transform_and_write_to_parquet(api_response_path : str = cfg.absolute_paths["json_abs_path"], parquet_path : str = cfg.absolute_paths["parquet_abs_path"]) -> None:
+def transform_and_write_to_parquet( \
+                                        api_response_path : str = cfg.absolute_paths["json_abs_path"], 
+                                        parquet_path : str = cfg.absolute_paths["parquet_abs_path"]
+                                    ) -> None:
     """Process with Spark json file from API response, create field 'velocity_in_miles_per_hour' and store output to parquet file.
 
     :param: None
@@ -225,7 +233,12 @@ def transform_and_write_to_parquet(api_response_path : str = cfg.absolute_paths[
         raise AirflowException({e})
 
 
-def load_parquet_to_mongodb_staging(database : str = cfg.mongo_db["database"], staging_collection : str = cfg.mongo_db["staging_collection"], parquet_path : str = cfg.absolute_paths["parquet_abs_path"]) -> None:
+def load_parquet_to_mongodb_staging( \
+                                        database : str = cfg.mongo_db["database"], 
+                                        staging_collection : str = cfg.mongo_db["staging_collection"], 
+                                        parquet_path : str = cfg.absolute_paths["parquet_abs_path"]
+                                    ) -> None:
+
     """With Spark read parquet file and store it mongodb staging collection.
 
     :param: None
@@ -260,7 +273,11 @@ def load_parquet_to_mongodb_staging(database : str = cfg.mongo_db["database"], s
         raise AirflowException({e})
 
 
-def populate_mongodb_production() -> None:
+def populate_mongodb_production( \
+                                    database : str = cfg.mongo_db["database"], 
+                                    staging_collection : str = cfg.mongo_db["staging_collection"], 
+                                    production_collection : str = cfg.mongo_db["production_collection"]
+                                ) -> None:
     """Populate mongodb production collection with staging documents.
 
     :param: None
@@ -271,9 +288,9 @@ def populate_mongodb_production() -> None:
 
         with MongoClient(host=cfg.mongo_db["host"], port=cfg.mongo_db["port"]) as client:
 
-            database = getattr(client, cfg.mongo_db["database"])
-            staging_collection = getattr(database, cfg.mongo_db["staging_collection"])
-            production_collection = getattr(database, cfg.mongo_db["production_collection"])
+            database = getattr(client, database)
+            staging_collection = getattr(database, staging_collection)
+            production_collection = getattr(database, production_collection)
 
             staging_documents = []
 

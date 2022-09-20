@@ -25,7 +25,7 @@ import functions as f
 def setUp():
     """Start Spark, define config and path to test data
     """
-    global spark, input_df, expected_df, expected_transformed_df, mongodb_staging_df
+    global spark, input_df, expected_df, expected_transformed_df, mongodb_staging_df, mongodb_production_df, mongodb_production_df_filtered
 
     # generate input_df: Retrieve API data for the same period with the same schema as test file
     f.collect_api_data(   start_date= '2022-07-27', \
@@ -44,6 +44,12 @@ def setUp():
                                         staging_collection = cfg.testing["test_staging_collection"], \
                                         parquet_path = cfg.absolute_paths["parquet_produced_dataset_abs_path"]
                                      )
+
+    # 
+    f.populate_mongodb_production(  database = cfg.testing["test_database"], \
+                                    staging_collection = cfg.testing["test_staging_collection"], \
+                                    production_collection = cfg.testing["test_production_collection"]
+                                 )
 
     spark = SparkSession \
         .builder \
@@ -70,6 +76,29 @@ def setUp():
                         .withColumn("date", col("date").cast("string")) \
                         .withColumn("date", to_date(col("date"))) \
                         .drop("_id")
+
+    mongodb_staging_df.createOrReplaceTempView("mongodb_staging_df")
+
+    # 
+    mongodb_production_df = spark.read.format("mongo") \
+                        .option("uri", cfg.mongo_db["url"]) \
+                        .option("database", cfg.testing["test_database"]) \
+                        .option("collection", cfg.testing["test_production_collection"]) \
+                        .load() \
+                        .withColumn("date", col("date").cast("string")) \
+                        .withColumn("date", to_date(col("date"))) \
+                        .drop("_id")
+    
+    mongodb_production_df.createOrReplaceTempView("mongodb_production_df")
+
+    # 
+    mongodb_production_df_filtered = spark.sql("""
+                                                    SELECT * FROM mongodb_production_df
+                                                    WHERE date IN (
+                                                                    SELECT DISTINCT date FROM mongodb_staging_df
+                                                                  )
+                                               """)
+
 
 def tearDown():
     """Stop Spark
@@ -177,6 +206,7 @@ class Test_API_Client(unittest.TestCase):
         self.assertEqual(input_df_agg_md5_hash, expected_df_agg_md5_hash)
 
 
+# Test Suite
 class Test_Transformations(unittest.TestCase):
     """Unit tests for Spark Transformation 
     """
@@ -242,6 +272,7 @@ class Test_Transformations(unittest.TestCase):
         self.assertEqual(float("{:.3f}".format(primary_df_lunar_distance)), float("{:.3f}".format(transformed_df_lunar_distance)))
 
 
+# Test Suite
 class Test_Loading_Parquet_to_MongoDB_Staging(unittest.TestCase):
     """Unit tests for loading parquet to mongodb staging collection
     """
@@ -294,6 +325,84 @@ class Test_Loading_Parquet_to_MongoDB_Staging(unittest.TestCase):
         self.assertEqual(float("{:.3f}".format(parquet_df_estimated_diameter_min_in_km)), float("{:.3f}".format(mongodb_staging_df_estimated_diameter_min_in_km)))
         self.assertEqual(float("{:.3f}".format(parquet_df_estimated_diameter_max_in_km)), float("{:.3f}".format(mongodb_staging_df_estimated_diameter_max_in_km)))
         self.assertEqual(float("{:.3f}".format(parquet_df_lunar_distance)), float("{:.3f}".format(mongodb_staging_df_lunar_distance)))
+
+
+# Test Suite
+class Test_Populating_MongoDB_Production(unittest.TestCase):
+    """Unit tests for populating mongodb production collection
+    """
+
+    # Test cases
+    def test_row_count_for_dates_in_staging(self):
+        mongodb_staging_df_rows = mongodb_staging_df.count()
+        mongodb_production_df_filtered_rows = mongodb_production_df_filtered.count()
+        self.assertEqual(mongodb_staging_df_rows, mongodb_production_df_filtered_rows)
+
+    def test_total_row_count(self):
+        mongodb_staging_df_rows = mongodb_staging_df.count()
+        mongodb_production_df_rows = mongodb_production_df.count()
+        self.assertGreater(mongodb_production_df_rows, mongodb_staging_df_rows)
+
+    def test_column_count(self):
+        mongodb_staging_df_cols = len(mongodb_staging_df.columns)
+        mongodb_production_df_cols = len(mongodb_production_df.columns)
+        self.assertEqual(mongodb_production_df_cols, mongodb_staging_df_cols)
+
+    def test_production_rows_not_on_staging_remained_the_same(self):
+        
+        expected_total_production_rows_not_on_staging = 448
+        """ the value is extracted with below mql query:
+
+            db.test_nasa_neo_service_production.find
+            ({
+                $or: [
+                        {date:{$lt:ISODate("2022-07-26T21:00:00.000+00:00")}},
+                        {date:{$gte:ISODate("2022-07-31T21:00:00.000+00:00")}}
+                    ]
+            })
+        """
+
+        total_production_rows_not_on_staging = mongodb_production_df.count() - mongodb_production_df_filtered.count()
+
+        self.assertEqual(total_production_rows_not_on_staging, expected_total_production_rows_not_on_staging)
+
+
+    def test_dimension_count_for_dates_in_staging(self):
+
+        mongodb_staging_df_agg = mongodb_staging_df.groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid") \
+            .count() \
+            .sort("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid")
+
+        mongodb_staging_df_agg_md5_hash = hashlib.md5(str(mongodb_staging_df_agg.collect()).encode('utf-8')).hexdigest()
+
+        # convert date from date type to string to match schemas since hash function takes it into account
+        mongodb_production_df_filtered_agg = mongodb_production_df_filtered \
+            .groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid") \
+            .count() \
+            .sort("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid")
+
+        mongodb_production_df_filtered_agg_md5_hash = hashlib.md5(str(mongodb_production_df_filtered_agg.collect()[0:]).encode('utf-8')).hexdigest()
+        
+        self.assertEqual(mongodb_staging_df_agg_md5_hash, mongodb_production_df_filtered_agg_md5_hash)
+
+
+    def test_metrics_sum_for_dates_in_staging(self):
+
+        mongodb_staging_df_velocity_in_km_per_hour=mongodb_staging_df.agg(sum("velocity_in_km_per_hour")).collect()[0][0]
+        mongodb_staging_df_estimated_diameter_min_in_km= mongodb_staging_df.agg(sum("estimated_diameter_min_in_km")).collect()[0][0]
+        mongodb_staging_df_estimated_diameter_max_in_km= mongodb_staging_df.agg(sum("estimated_diameter_max_in_km")).collect()[0][0]
+        mongodb_staging_df_lunar_distance= mongodb_staging_df.agg(sum("lunar_distance")).collect()[0][0]
+
+        mongodb_production_df_filtered_velocity_in_km_per_hour= mongodb_production_df_filtered.agg(sum("velocity_in_km_per_hour")).collect()[0][0]
+        mongodb_production_df_filtered_estimated_diameter_min_in_km= mongodb_production_df_filtered.agg(sum("estimated_diameter_min_in_km")).collect()[0][0]
+        mongodb_production_df_filtered_estimated_diameter_max_in_km= mongodb_production_df_filtered.agg(sum("estimated_diameter_max_in_km")).collect()[0][0]
+        mongodb_production_df_filtered_lunar_distance= mongodb_production_df_filtered.agg(sum("lunar_distance")).collect()[0][0]
+
+        self.assertEqual(float("{:.3f}".format(mongodb_production_df_filtered_velocity_in_km_per_hour)), float("{:.3f}".format(mongodb_staging_df_velocity_in_km_per_hour)))
+        self.assertEqual(float("{:.3f}".format(mongodb_production_df_filtered_estimated_diameter_min_in_km)), float("{:.3f}".format(mongodb_staging_df_estimated_diameter_min_in_km)))
+        self.assertEqual(float("{:.3f}".format(mongodb_production_df_filtered_estimated_diameter_max_in_km)), float("{:.3f}".format(mongodb_staging_df_estimated_diameter_max_in_km)))
+        self.assertEqual(float("{:.3f}".format(mongodb_production_df_filtered_lunar_distance)), float("{:.3f}".format(mongodb_staging_df_lunar_distance)))
+
 
 if __name__ == '__main__':
 
