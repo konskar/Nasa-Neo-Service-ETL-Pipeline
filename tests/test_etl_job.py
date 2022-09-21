@@ -30,7 +30,6 @@ def Produce_Files() -> None:
                           api_response_path = cfg.absolute_paths["api_produced_dataset_abs_path"]
                       )
     
-
     # Produce parquet file "api_produced_dataset" from 'api_produced_dataset' applying transformation
     f.transform_and_write_to_parquet(   api_response_path = cfg.absolute_paths["api_produced_dataset_abs_path"], \
                                         parquet_path = cfg.absolute_paths["parquet_produced_dataset_abs_path"]

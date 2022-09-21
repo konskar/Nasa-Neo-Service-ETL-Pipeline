@@ -87,7 +87,10 @@ def collect_api_data( \
         or dag is triggered with date configuration e.g. {"start_date": "2022-07-27", "end_date":"2022-07-29"}
         API response is saved in JSON file.
 
-    :param kwargs: Dict with Airflow build-in variables and user arguments if provided.
+    :param 'start_date': Start date API request parameter
+    :param 'end_date': End date API request parameter
+    :param 'api_response_path': Path to save API response in JSON form 
+    :param 'kwargs': Dict with Airflow build-in variables and user arguments if provided.
     :return: None
     """        
     try:
@@ -199,7 +202,8 @@ def transform_and_write_to_parquet( \
                                     ) -> None:
     """Process with Spark json file from API response, create field 'velocity_in_miles_per_hour' and store output to parquet file.
 
-    :param: None
+    :param 'api_response_path': Path of API response saved as json file
+    :param 'parquet_path': Path of parquet file that will store transformed dataset
     :return: None
     """        
     try:
@@ -238,10 +242,11 @@ def load_parquet_to_mongodb_staging( \
                                         staging_collection : str = cfg.mongo_db["staging_collection"], 
                                         parquet_path : str = cfg.absolute_paths["parquet_abs_path"]
                                     ) -> None:
-
     """With Spark read parquet file and store it mongodb staging collection.
 
-    :param: None
+    :param 'database': Mongodb database that holds staging and production collections
+    :param 'staging_collection': Staging collection that will be populated with parquet data 
+    :param 'parquet_path': Path of parquet file that transformed dataset is stored
     :return: None
     """     
     try:
@@ -280,7 +285,9 @@ def populate_mongodb_production( \
                                 ) -> None:
     """Populate mongodb production collection with staging documents.
 
-    :param: None
+    :param 'database': Mongodb database that holds staging and production collections
+    :param 'staging_collection': Staging collection loaded with transformed dataset
+    :param 'production_collection': Production collection that will be populated with staging collection records    
     :return: None
     """   
     try:
@@ -336,7 +343,6 @@ ds: {kwargs["ds"]}
 params: {kwargs["params"]}
 
 """
-
         send_email(message)
 
         end_time = time.time()
