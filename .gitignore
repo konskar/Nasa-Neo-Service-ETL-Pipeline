@@ -1,12 +1,13 @@
 
 /.env
-/run_function.py
+/venv
 /input_output_files/http_cache.sqlite
 /input_output_files/*.json
 /input_output_files/*.parquet
+/test.py
+tests/produced_datasets/*
+.vscode
 /jobs/__pycache__
 /configs/__pycache__
-/script.py
-/test.py
-/venv
 /__pycache__
+tests/__pycache__

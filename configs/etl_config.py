@@ -40,12 +40,24 @@ email = {
     "smtp_server" : os.getenv('SMTP_SERVER'),
     "sender_email" : os.getenv('SMTP_SENDER_EMAIL'),
     "password" : os.getenv('SMTP_PASSWORD'),
-    "receiver_email_list" : [os.getenv('SMTP_RECIEVER_EMAIL_USER_A'), os.getenv('SMTP_RECIEVER_EMAIL_USER_B')],
-    "receiver_email" : os.getenv('SMTP_RECIEVER_EMAIL_USER_A'),
+    "receiver_email_list" : [os.getenv('SMTP_RECEIVER_EMAIL_USER_A'), os.getenv('SMTP_RECEIVER_EMAIL_USER_B')],
+    "receiver_email" : os.getenv('SMTP_RECEIVER_EMAIL_USER_A'),
+}
+
+testing = {
+    "api_test_dataset": os.getenv('API_TEST_DATASET'),
+    "api_produced_dataset": os.getenv('API_PRODUCED_DATASET'),
+    "parquet_produced_dataset": os.getenv('PARQUET_PRODUCED_DATASET'),
+    "test_database": os.getenv('MONGODB_TEST_DATABASE'),
+    "test_staging_collection": os.getenv('MONGODB_TEST_STAGING_COLLECTION'),
+    "test_production_collection": os.getenv('MONGODB_TEST_PRODUCTION_COLLECTION')    
 }
 
 absolute_paths = {
     "json_abs_path": os.path.join(airflow["project_path"], nasa_neo_api["json_file"]),
     "cache_abs_path": os.path.join(airflow["project_path"], nasa_neo_api["cache"]),
-    "parquet_abs_path": os.path.join(airflow["project_path"], spark["parquet_path"])
+    "parquet_abs_path": os.path.join(airflow["project_path"], spark["parquet_path"]),
+    "api_test_dataset_abs_path": os.path.join(airflow["project_path"], testing["api_test_dataset"]),
+    "api_produced_dataset_abs_path": os.path.join(airflow["project_path"], testing["api_produced_dataset"]),
+    "parquet_produced_dataset_abs_path": os.path.join(airflow["project_path"], testing["parquet_produced_dataset"])
 }
