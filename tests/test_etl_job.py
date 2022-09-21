@@ -52,7 +52,7 @@ def Produce_Files() -> None:
 def Spark_Setup() -> None:
     """Start Spark Session and define dataframes that will be used in unit/integration tests
     """
-    global spark, api_produced_df, api_validated_df, transformed_df, mongodb_staging_df, mongodb_production_df, mongodb_production_df_filtered
+    global spark, api_produced_df, api_validated_df, transformed_df, mongodb_staging_df, mongodb_production_df, mongodb_production_df_date_filtered
 
     spark = SparkSession \
         .builder \
@@ -95,7 +95,7 @@ def Spark_Setup() -> None:
     mongodb_production_df.createOrReplaceTempView("mongodb_production_df")
 
     # Dataframe of mongodb test production collection containing only rows for the dates on staging collection
-    mongodb_production_df_filtered = spark.sql("""
+    mongodb_production_df_date_filtered = spark.sql("""
                                                     SELECT * FROM mongodb_production_df
                                                     WHERE date IN (
                                                                     SELECT DISTINCT date FROM mongodb_staging_df
@@ -118,102 +118,109 @@ class Test_API_Client(unittest.TestCase):
 
 	# Test cases
     def test_schema(self):
-        result = api_produced_df.schema
-        expected_result = api_validated_df.schema
-        self.assertEqual(result, expected_result)
+        api_produced_df_schema = api_produced_df.schema
+        api_validated_df_schema = api_validated_df.schema
+        self.assertEqual(api_produced_df_schema, api_validated_df_schema)
 
 
     def test_column_count(self):
-        result = len(api_produced_df.columns)
-        expected_result = len(api_validated_df.columns)
-        self.assertEqual(result, expected_result)
+        api_produced_df_column_count = len(api_produced_df.columns)
+        api_validated_df_column_count = len(api_validated_df.columns)
+        self.assertEqual(api_produced_df_column_count, api_validated_df_column_count)
 
 
     def test_row_count(self):
-        result = api_produced_df.count()
-        expected_result = api_validated_df.count()
-        self.assertEqual(result, expected_result)
+        api_produced_df_rows = api_produced_df.count()
+        api_validated_df_rows = api_validated_df.count()
+        self.assertEqual(api_produced_df_rows, api_validated_df_rows)
 
 
     def test_column_names(self):
-        result = api_produced_df.columns
-        expected_result = api_validated_df.columns
-        self.assertEqual(result, expected_result)
+        api_produced_df_column_names = api_produced_df.columns
+        api_validated_df_column_names = api_validated_df.columns
+        self.assertEqual(api_produced_df_column_names, api_validated_df_column_names)
 
 
     def test_average_lunar_distance(self):
+        api_produced_df_avg_lunar_distance = (
+                                                api_produced_df
+                                                .agg(avg('lunar_distance').alias('average_lunar_distance'))
+                                                .collect()[0]['average_lunar_distance']
+                                             )
 
-        result = (
-            api_produced_df
-            .agg(avg('lunar_distance').alias('average_lunar_distance'))
-            .collect()[0]['average_lunar_distance'])
-
-        expected_result = (
-            api_validated_df
-            .agg(avg('lunar_distance').alias('average_lunar_distance'))
-            .collect()[0]['average_lunar_distance'])
+        api_validated_df_avg_lunar_distance = (
+                                                api_validated_df
+                                                .agg(avg('lunar_distance').alias('average_lunar_distance'))
+                                                .collect()[0]['average_lunar_distance']
+                                               )
         
-        self.assertEqual(result, expected_result)
+        self.assertEqual(api_produced_df_avg_lunar_distance, api_validated_df_avg_lunar_distance)
 
 
     def test_sum_of_velocity_in_km_per_hour(self):
-        result = (
-            api_produced_df
-            .agg(sum('velocity_in_km_per_hour').alias('sum_velocity_in_km_per_hour'))
-            .collect()[0]['sum_velocity_in_km_per_hour'])
+        api_produced_df_velocity_in_km_per_hour = (
+                                                    api_produced_df
+                                                    .agg(sum('velocity_in_km_per_hour').alias('sum_velocity_in_km_per_hour'))
+                                                    .collect()[0]['sum_velocity_in_km_per_hour']
+                                                  )
 
-        expected_result = (
-            api_validated_df
-            .agg(sum('velocity_in_km_per_hour').alias('sum_velocity_in_km_per_hour'))
-            .collect()[0]['sum_velocity_in_km_per_hour'])
+        api_validated_df_velocity_in_km_per_hour = (
+                                                    api_validated_df
+                                                    .agg(sum('velocity_in_km_per_hour').alias('sum_velocity_in_km_per_hour'))
+                                                    .collect()[0]['sum_velocity_in_km_per_hour']
+                                                   )
         
-        self.assertEqual(result, expected_result)
+        self.assertEqual(api_produced_df_velocity_in_km_per_hour, api_validated_df_velocity_in_km_per_hour)
 
 
     def test_sum_of_estimated_diameter_min_in_km(self):
-        result = (
-            api_produced_df
-            .agg(sum('estimated_diameter_min_in_km').alias('sum_estimated_diameter_min_in_km'))
-            .collect()[0]['sum_estimated_diameter_min_in_km'])
+        api_produced_df_sum_of_estimated_diameter_min_in_km = (
+                                                                api_produced_df
+                                                                .agg(sum('estimated_diameter_min_in_km').alias('sum_estimated_diameter_min_in_km'))
+                                                                .collect()[0]['sum_estimated_diameter_min_in_km']
+                                                              )
 
-        expected_result = (
-            api_validated_df
-            .agg(sum('estimated_diameter_min_in_km').alias('sum_estimated_diameter_min_in_km'))
-            .collect()[0]['sum_estimated_diameter_min_in_km'])
+        api_validated_df_sum_of_estimated_diameter_min_in_km = (
+                                                                api_validated_df
+                                                                .agg(sum('estimated_diameter_min_in_km').alias('sum_estimated_diameter_min_in_km'))
+                                                                .collect()[0]['sum_estimated_diameter_min_in_km']
+                                                               )
 
-        self.assertEqual(result, expected_result)
+        self.assertEqual(api_produced_df_sum_of_estimated_diameter_min_in_km, api_validated_df_sum_of_estimated_diameter_min_in_km)
     
 
     def test_sum_of_estimated_diameter_max_in_km(self):
-        result = (
-            api_produced_df
-            .agg(sum('estimated_diameter_max_in_km').alias('sum_estimated_diameter_max_in_km'))
-            .collect()[0]['sum_estimated_diameter_max_in_km'])
+        api_produced_df_sum_of_estimated_diameter_max_in_km = (
+                                                                api_produced_df
+                                                                .agg(sum('estimated_diameter_max_in_km').alias('sum_estimated_diameter_max_in_km'))
+                                                                .collect()[0]['sum_estimated_diameter_max_in_km']
+                                                              )
 
-        expected_result = (
-            api_validated_df
-            .agg(sum('estimated_diameter_max_in_km').alias('sum_estimated_diameter_max_in_km'))
-            .collect()[0]['sum_estimated_diameter_max_in_km'])
-        
-        self.assertEqual(result, expected_result)
+        api_validated_df_sum_of_estimated_diameter_max_in_km = (
+                                                                api_validated_df
+                                                                .agg(sum('estimated_diameter_max_in_km').alias('sum_estimated_diameter_max_in_km'))
+                                                                .collect()[0]['sum_estimated_diameter_max_in_km']
+                                                               )     
+
+        self.assertEqual(api_produced_df_sum_of_estimated_diameter_max_in_km, api_validated_df_sum_of_estimated_diameter_max_in_km)
 
 
     def test_dimension_count(self):
         api_produced_df_agg = api_produced_df.groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid").count()
-        result = hashlib.md5(str(api_produced_df_agg.collect()[0:]).encode('utf-8')).hexdigest()
+        api_produced_df_agg_md5_hash = hashlib.md5(str(api_produced_df_agg.collect()[0:]).encode('utf-8')).hexdigest()
 
         api_validated_df_agg = api_validated_df.groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid").count()
-        expected_result = hashlib.md5(str(api_validated_df_agg.collect()).encode('utf-8')).hexdigest()
+        api_validated_df_agg_md5_hash = hashlib.md5(str(api_validated_df_agg.collect()).encode('utf-8')).hexdigest()
 
         # Compare hashes instead of lists for better performance
-        self.assertEqual(result, expected_result)
+        self.assertEqual(api_produced_df_agg_md5_hash, api_validated_df_agg_md5_hash)
 
 
 # Test Suite
 class Test_Transformations(unittest.TestCase):
     """Unit tests for Spark Transformation 
 
-    "api_produced_df" should be like to like with "api_validated_df"
+    "transformed_df" should be like "api_validated_df", except having the additional field 'velocity_in_miles_per_hour_double'
     """
 
     # Test cases
@@ -224,121 +231,124 @@ class Test_Transformations(unittest.TestCase):
 
 
     def test_row_count(self):
-        # rows between original and transformed df should match
-        primary_df_rows = api_validated_df.count()
+        api_validated_df_rows = api_validated_df.count()
         transformed_df_rows = transformed_df.count()
-        self.assertEqual(primary_df_rows, transformed_df_rows)
+        self.assertEqual(api_validated_df_rows, transformed_df_rows)
 
 
     def test_column_count(self):
-        # transformed df has one new column
-        primary_df_cols = len(api_validated_df.columns)
-        transformed_df_cols = len(transformed_df.columns)
-        self.assertEqual(primary_df_cols, transformed_df_cols - 1)
+        api_validated_df_column_count = len(api_validated_df.columns)
+        transformed_df_column_count = len(transformed_df.columns)
+
+        # transformed df has one new column        
+        self.assertEqual(api_validated_df_column_count, transformed_df_column_count - 1)
 
 
     def test_dimension_count(self):
+        api_validated_df_agg = api_validated_df.groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid") \
+                                               .count() \
+                                               .sort("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid")
 
-        primary_df_agg = api_validated_df.groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid") \
-            .count() \
-            .sort("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid")
+        api_validated_df_agg_md5_hash = hashlib.md5(str(api_validated_df_agg.collect()).encode('utf-8')).hexdigest()
 
-        primary_df_agg_md5_hash = hashlib.md5(str(primary_df_agg.collect()).encode('utf-8')).hexdigest()
-
-        # convert date from date type to string to match schemas since hash function takes it into account
-        transformed_df_agg = transformed_df.withColumn("date",col("date").cast("string")) \
-            .groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid") \
-            .count() \
-            .sort("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid")
+        # convert date from date type to string to match schemas, since hash function takes schema into account
+        transformed_df_agg =  transformed_df.withColumn("date",col("date").cast("string")) \
+                                            .groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid") \
+                                            .count() \
+                                            .sort("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid")
 
         transformed_df_agg_md5_hash = hashlib.md5(str(transformed_df_agg.collect()[0:]).encode('utf-8')).hexdigest()
         
-        self.assertEqual(primary_df_agg_md5_hash, transformed_df_agg_md5_hash)
+        self.assertEqual(api_validated_df_agg_md5_hash, transformed_df_agg_md5_hash)
 
 
     def test_metrics_sum(self):
 
-        primary_df_velocity_in_km_per_hour= api_validated_df.agg(sum("velocity_in_km_per_hour")).collect()[0][0]
-        primary_df_estimated_diameter_min_in_km= api_validated_df.agg(sum("estimated_diameter_min_in_km")).collect()[0][0]
-        primary_df_estimated_diameter_max_in_km= api_validated_df.agg(sum("estimated_diameter_max_in_km")).collect()[0][0]
-        primary_df_lunar_distance= api_validated_df.agg(sum("lunar_distance")).collect()[0][0]
+        api_validated_df_velocity_in_km_per_hour= api_validated_df.agg(sum("velocity_in_km_per_hour")).collect()[0][0]
+        api_validated_df_estimated_diameter_min_in_km= api_validated_df.agg(sum("estimated_diameter_min_in_km")).collect()[0][0]
+        api_validated_df_estimated_diameter_max_in_km= api_validated_df.agg(sum("estimated_diameter_max_in_km")).collect()[0][0]
+        api_validated_df_lunar_distance= api_validated_df.agg(sum("lunar_distance")).collect()[0][0]
 
         transformed_df_velocity_in_km_per_hour=transformed_df.agg(sum("velocity_in_km_per_hour")).collect()[0][0]
         transformed_df_estimated_diameter_min_in_km= transformed_df.agg(sum("estimated_diameter_min_in_km")).collect()[0][0]
         transformed_df_estimated_diameter_max_in_km= transformed_df.agg(sum("estimated_diameter_max_in_km")).collect()[0][0]
         transformed_df_lunar_distance= transformed_df.agg(sum("lunar_distance")).collect()[0][0]
 
-        self.assertEqual(float("{:.3f}".format(primary_df_velocity_in_km_per_hour)), float("{:.3f}".format(transformed_df_velocity_in_km_per_hour)))
-        self.assertEqual(float("{:.3f}".format(primary_df_estimated_diameter_min_in_km)), float("{:.3f}".format(transformed_df_estimated_diameter_min_in_km)))
-        self.assertEqual(float("{:.3f}".format(primary_df_estimated_diameter_max_in_km)), float("{:.3f}".format(transformed_df_estimated_diameter_max_in_km)))
-        self.assertEqual(float("{:.3f}".format(primary_df_lunar_distance)), float("{:.3f}".format(transformed_df_lunar_distance)))
+        self.assertEqual(float("{:.3f}".format(api_validated_df_velocity_in_km_per_hour)), float("{:.3f}".format(transformed_df_velocity_in_km_per_hour)))
+        self.assertEqual(float("{:.3f}".format(api_validated_df_estimated_diameter_min_in_km)), float("{:.3f}".format(transformed_df_estimated_diameter_min_in_km)))
+        self.assertEqual(float("{:.3f}".format(api_validated_df_estimated_diameter_max_in_km)), float("{:.3f}".format(transformed_df_estimated_diameter_max_in_km)))
+        self.assertEqual(float("{:.3f}".format(api_validated_df_lunar_distance)), float("{:.3f}".format(transformed_df_lunar_distance)))
 
 
 # Test Suite
 class Test_Loading_Parquet_to_MongoDB_Staging(unittest.TestCase):
     """Unit tests for loading parquet to mongodb staging collection
+
+    mongodb_staging should be like to like with "transformed_df"
     """
 
     # Test cases
     def test_row_count(self):
-        parquet_df_rows = transformed_df.count()
+        transformed_df_rows = transformed_df.count()
         mongodb_staging_df_rows = mongodb_staging_df.count()
-        self.assertEqual(parquet_df_rows, mongodb_staging_df_rows)
+        self.assertEqual(transformed_df_rows, mongodb_staging_df_rows)
 
 
     def test_column_count(self):
-        parquet_df_cols = len(transformed_df.columns)
-        mongodb_staging_df_cols = len(mongodb_staging_df.columns)
-        self.assertEqual(parquet_df_cols, mongodb_staging_df_cols)
+        transformed_df_column_count= len(transformed_df.columns)
+        mongodb_staging_df_column_count= len(mongodb_staging_df.columns)
+        self.assertEqual(transformed_df_column_count, mongodb_staging_df_column_count)
 
 
     def test_dimension_count(self):
 
-        parquet_df_agg = transformed_df.groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid") \
-            .count() \
-            .sort("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid")
+        transformed_df_agg = transformed_df.groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid") \
+                                           .count() \
+                                           .sort("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid")
 
-        parquet_df_agg_md5_hash = hashlib.md5(str(parquet_df_agg.collect()).encode('utf-8')).hexdigest()
+        transformed_df_agg_md5_hash = hashlib.md5(str(transformed_df_agg.collect()).encode('utf-8')).hexdigest()
 
         # convert date from date type to string to match schemas since hash function takes it into account
-        mongodb_staging_df_agg = mongodb_staging_df \
-            .groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid") \
-            .count() \
-            .sort("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid")
+        mongodb_staging_df_agg = mongodb_staging_df.groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid") \
+                                                   .count() \
+                                                   .sort("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid")
 
         mongodb_staging_df_agg_md5_hash = hashlib.md5(str(mongodb_staging_df_agg.collect()[0:]).encode('utf-8')).hexdigest()
         
-        self.assertEqual(parquet_df_agg_md5_hash, mongodb_staging_df_agg_md5_hash)
+        self.assertEqual(transformed_df_agg_md5_hash, mongodb_staging_df_agg_md5_hash)
 
 
     def test_metrics_sum(self):
 
-        parquet_df_velocity_in_km_per_hour= transformed_df.agg(sum("velocity_in_km_per_hour")).collect()[0][0]
-        parquet_df_estimated_diameter_min_in_km= transformed_df.agg(sum("estimated_diameter_min_in_km")).collect()[0][0]
-        parquet_df_estimated_diameter_max_in_km= transformed_df.agg(sum("estimated_diameter_max_in_km")).collect()[0][0]
-        parquet_df_lunar_distance= transformed_df.agg(sum("lunar_distance")).collect()[0][0]
+        transformed_df_velocity_in_km_per_hour= transformed_df.agg(sum("velocity_in_km_per_hour")).collect()[0][0]
+        transformed_df_estimated_diameter_min_in_km= transformed_df.agg(sum("estimated_diameter_min_in_km")).collect()[0][0]
+        transformed_df_estimated_diameter_max_in_km= transformed_df.agg(sum("estimated_diameter_max_in_km")).collect()[0][0]
+        transformed_df_lunar_distance= transformed_df.agg(sum("lunar_distance")).collect()[0][0]
 
         mongodb_staging_df_velocity_in_km_per_hour=mongodb_staging_df.agg(sum("velocity_in_km_per_hour")).collect()[0][0]
         mongodb_staging_df_estimated_diameter_min_in_km= mongodb_staging_df.agg(sum("estimated_diameter_min_in_km")).collect()[0][0]
         mongodb_staging_df_estimated_diameter_max_in_km= mongodb_staging_df.agg(sum("estimated_diameter_max_in_km")).collect()[0][0]
         mongodb_staging_df_lunar_distance= mongodb_staging_df.agg(sum("lunar_distance")).collect()[0][0]
 
-        self.assertEqual(float("{:.3f}".format(parquet_df_velocity_in_km_per_hour)), float("{:.3f}".format(mongodb_staging_df_velocity_in_km_per_hour)))
-        self.assertEqual(float("{:.3f}".format(parquet_df_estimated_diameter_min_in_km)), float("{:.3f}".format(mongodb_staging_df_estimated_diameter_min_in_km)))
-        self.assertEqual(float("{:.3f}".format(parquet_df_estimated_diameter_max_in_km)), float("{:.3f}".format(mongodb_staging_df_estimated_diameter_max_in_km)))
-        self.assertEqual(float("{:.3f}".format(parquet_df_lunar_distance)), float("{:.3f}".format(mongodb_staging_df_lunar_distance)))
+        self.assertEqual(float("{:.3f}".format(transformed_df_velocity_in_km_per_hour)), float("{:.3f}".format(mongodb_staging_df_velocity_in_km_per_hour)))
+        self.assertEqual(float("{:.3f}".format(transformed_df_estimated_diameter_min_in_km)), float("{:.3f}".format(mongodb_staging_df_estimated_diameter_min_in_km)))
+        self.assertEqual(float("{:.3f}".format(transformed_df_estimated_diameter_max_in_km)), float("{:.3f}".format(mongodb_staging_df_estimated_diameter_max_in_km)))
+        self.assertEqual(float("{:.3f}".format(transformed_df_lunar_distance)), float("{:.3f}".format(mongodb_staging_df_lunar_distance)))
 
 
 # Test Suite
 class Test_Populating_MongoDB_Production(unittest.TestCase):
     """Unit tests for populating mongodb production collection
+
+    mongodb_production should match mongodb_staging on dates that are on staging
+    mongodb_production has data for other dates that should not ne affected 
     """
 
     # Test cases
     def test_row_count_for_dates_in_staging(self):
         mongodb_staging_df_rows = mongodb_staging_df.count()
-        mongodb_production_df_filtered_rows = mongodb_production_df_filtered.count()
-        self.assertEqual(mongodb_staging_df_rows, mongodb_production_df_filtered_rows)
+        mongodb_production_df_date_filtered_rows = mongodb_production_df_date_filtered.count()
+        self.assertEqual(mongodb_staging_df_rows, mongodb_production_df_date_filtered_rows)
 
     def test_total_row_count(self):
         mongodb_staging_df_rows = mongodb_staging_df.count()
@@ -364,7 +374,7 @@ class Test_Populating_MongoDB_Production(unittest.TestCase):
             })
         """
 
-        total_production_rows_not_on_staging = mongodb_production_df.count() - mongodb_production_df_filtered.count()
+        total_production_rows_not_on_staging = mongodb_production_df.count() - mongodb_production_df_date_filtered.count()
 
         self.assertEqual(total_production_rows_not_on_staging, expected_total_production_rows_not_on_staging)
 
@@ -372,20 +382,19 @@ class Test_Populating_MongoDB_Production(unittest.TestCase):
     def test_dimension_count_for_dates_in_staging(self):
 
         mongodb_staging_df_agg = mongodb_staging_df.groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid") \
-            .count() \
-            .sort("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid")
+                                                   .count() \
+                                                   .sort("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid")
 
         mongodb_staging_df_agg_md5_hash = hashlib.md5(str(mongodb_staging_df_agg.collect()).encode('utf-8')).hexdigest()
 
         # convert date from date type to string to match schemas since hash function takes it into account
-        mongodb_production_df_filtered_agg = mongodb_production_df_filtered \
-            .groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid") \
-            .count() \
-            .sort("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid")
+        mongodb_production_df_date_filtered_agg = mongodb_production_df_date_filtered.groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid") \
+                                                                                     .count() \
+                                                                                     .sort("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid")
 
-        mongodb_production_df_filtered_agg_md5_hash = hashlib.md5(str(mongodb_production_df_filtered_agg.collect()[0:]).encode('utf-8')).hexdigest()
+        mongodb_production_df_date_filtered_agg_md5_hash = hashlib.md5(str(mongodb_production_df_date_filtered_agg.collect()[0:]).encode('utf-8')).hexdigest()
         
-        self.assertEqual(mongodb_staging_df_agg_md5_hash, mongodb_production_df_filtered_agg_md5_hash)
+        self.assertEqual(mongodb_staging_df_agg_md5_hash, mongodb_production_df_date_filtered_agg_md5_hash)
 
 
     def test_metrics_sum_for_dates_in_staging(self):
@@ -395,15 +404,15 @@ class Test_Populating_MongoDB_Production(unittest.TestCase):
         mongodb_staging_df_estimated_diameter_max_in_km= mongodb_staging_df.agg(sum("estimated_diameter_max_in_km")).collect()[0][0]
         mongodb_staging_df_lunar_distance= mongodb_staging_df.agg(sum("lunar_distance")).collect()[0][0]
 
-        mongodb_production_df_filtered_velocity_in_km_per_hour= mongodb_production_df_filtered.agg(sum("velocity_in_km_per_hour")).collect()[0][0]
-        mongodb_production_df_filtered_estimated_diameter_min_in_km= mongodb_production_df_filtered.agg(sum("estimated_diameter_min_in_km")).collect()[0][0]
-        mongodb_production_df_filtered_estimated_diameter_max_in_km= mongodb_production_df_filtered.agg(sum("estimated_diameter_max_in_km")).collect()[0][0]
-        mongodb_production_df_filtered_lunar_distance= mongodb_production_df_filtered.agg(sum("lunar_distance")).collect()[0][0]
+        mongodb_production_df_date_filtered_velocity_in_km_per_hour= mongodb_production_df_date_filtered.agg(sum("velocity_in_km_per_hour")).collect()[0][0]
+        mongodb_production_df_date_filtered_estimated_diameter_min_in_km= mongodb_production_df_date_filtered.agg(sum("estimated_diameter_min_in_km")).collect()[0][0]
+        mongodb_production_df_date_filtered_estimated_diameter_max_in_km= mongodb_production_df_date_filtered.agg(sum("estimated_diameter_max_in_km")).collect()[0][0]
+        mongodb_production_df_date_filtered_lunar_distance= mongodb_production_df_date_filtered.agg(sum("lunar_distance")).collect()[0][0]
 
-        self.assertEqual(float("{:.3f}".format(mongodb_production_df_filtered_velocity_in_km_per_hour)), float("{:.3f}".format(mongodb_staging_df_velocity_in_km_per_hour)))
-        self.assertEqual(float("{:.3f}".format(mongodb_production_df_filtered_estimated_diameter_min_in_km)), float("{:.3f}".format(mongodb_staging_df_estimated_diameter_min_in_km)))
-        self.assertEqual(float("{:.3f}".format(mongodb_production_df_filtered_estimated_diameter_max_in_km)), float("{:.3f}".format(mongodb_staging_df_estimated_diameter_max_in_km)))
-        self.assertEqual(float("{:.3f}".format(mongodb_production_df_filtered_lunar_distance)), float("{:.3f}".format(mongodb_staging_df_lunar_distance)))
+        self.assertEqual(float("{:.3f}".format(mongodb_production_df_date_filtered_velocity_in_km_per_hour)), float("{:.3f}".format(mongodb_staging_df_velocity_in_km_per_hour)))
+        self.assertEqual(float("{:.3f}".format(mongodb_production_df_date_filtered_estimated_diameter_min_in_km)), float("{:.3f}".format(mongodb_staging_df_estimated_diameter_min_in_km)))
+        self.assertEqual(float("{:.3f}".format(mongodb_production_df_date_filtered_estimated_diameter_max_in_km)), float("{:.3f}".format(mongodb_staging_df_estimated_diameter_max_in_km)))
+        self.assertEqual(float("{:.3f}".format(mongodb_production_df_date_filtered_lunar_distance)), float("{:.3f}".format(mongodb_staging_df_lunar_distance)))
 
 
 if __name__ == '__main__':
