@@ -9,7 +9,7 @@ import time
 import requests
 import requests_cache
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col
+from pyspark.sql.functions import col,to_date, date_format
 from pymongo import MongoClient
 from airflow import AirflowException
 import smtplib, ssl
@@ -217,10 +217,12 @@ def transform_and_write_to_parquet( \
                 .getOrCreate()
 
         nasa_neo_df = spark.read.option("multiline", "true").json(api_response_path)
-
         cached_nasa_neo_df = nasa_neo_df.cache()
 
-        nasa_neo_transformed_df = cached_nasa_neo_df.withColumn("velocity_in_miles_per_hour", col("velocity_in_km_per_hour") * 0.621371)
+        nasa_neo_transformed_df = cached_nasa_neo_df \
+                                .withColumn("lunar_distance", col("lunar_distance").cast("double")) \
+                                .withColumn("velocity_in_km_per_hour", col("velocity_in_km_per_hour").cast("double")) \
+                                .withColumn("velocity_in_miles_per_hour", col("velocity_in_km_per_hour") * 0.621371)
 
         nasa_neo_transformed_df.write.mode('overwrite').partitionBy("date").parquet(parquet_path)
 

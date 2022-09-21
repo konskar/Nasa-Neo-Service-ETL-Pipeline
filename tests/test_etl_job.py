@@ -224,8 +224,8 @@ class Test_Transformations(unittest.TestCase):
 
     # Test cases
     def test_velocity_conversion_to_miles(self):
-        velocity_in_km_per_hour = transformed_df.withColumn("velocity_in_km_per_hour_double",col("velocity_in_km_per_hour").cast("double")).groupBy().sum("velocity_in_km_per_hour_double").collect()[0][0]
-        velocity_in_miles_per_hour = transformed_df.withColumn("velocity_in_miles_per_hour_double",col("velocity_in_miles_per_hour").cast("double")).groupBy().sum("velocity_in_miles_per_hour_double").collect()[0][0]
+        velocity_in_km_per_hour = transformed_df.groupBy().sum("velocity_in_km_per_hour").collect()[0][0]
+        velocity_in_miles_per_hour = transformed_df.groupBy().sum("velocity_in_miles_per_hour").collect()[0][0]
         self.assertEqual(float("{:.8f}".format(velocity_in_km_per_hour * 0.621371)), float("{:.8f}".format(velocity_in_miles_per_hour)))
 
 
@@ -307,7 +307,6 @@ class Test_Loading_Parquet_to_MongoDB_Staging(unittest.TestCase):
 
         transformed_df_agg_md5_hash = hashlib.md5(str(transformed_df_agg.collect()).encode('utf-8')).hexdigest()
 
-        # convert date from date type to string to match schemas since hash function takes it into account
         mongodb_staging_df_agg = mongodb_staging_df.groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid") \
                                                    .count() \
                                                    .sort("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid")
@@ -386,7 +385,6 @@ class Test_Populating_MongoDB_Production(unittest.TestCase):
 
         mongodb_staging_df_agg_md5_hash = hashlib.md5(str(mongodb_staging_df_agg.collect()).encode('utf-8')).hexdigest()
 
-        # convert date from date type to string to match schemas since hash function takes it into account
         mongodb_production_df_date_filtered_agg = mongodb_production_df_date_filtered.groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid") \
                                                                                      .count() \
                                                                                      .sort("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid")
