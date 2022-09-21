@@ -12,3 +12,4 @@
 /__pycache__
 tests/__pycache__
 tests/produced_datasets/*
+.vscode
