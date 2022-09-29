@@ -10,8 +10,17 @@ from airflow.models.baseoperator import chain
 import pendulum
 
 # Local application imports
-from nasa_neo_service_etl_dag.jobs import functions as f
-from nasa_neo_service_etl_dag.configs import etl_config as cfg
+# Import libraries according to the environment the script is running (WSL or Docker)
+try:  # WSL
+
+    from nasa_neo_service_etl_dag.jobs import functions as f
+    from nasa_neo_service_etl_dag.configs import etl_config as cfg
+
+except: # Docker wsl_env_load:latest image
+    
+    import functions as f
+    import etl_config as cfg
+
 
 # Variables
 local_tz = pendulum.timezone("Europe/Athens")

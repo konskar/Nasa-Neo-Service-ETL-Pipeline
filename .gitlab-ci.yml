@@ -1,0 +1,19 @@
+
+image: wsl_env_load:latest # like to like environment that airflow runs with .env file loaded
+
+cache: # cache downloaded pip packages
+  paths:
+    - .cache/pip
+    - venv/
+
+before_script:
+  - python3 -V # check python version
+  - pip install virtualenv
+  - virtualenv venv # initialize virtual environment
+  - source venv/bin/activate # switch to virtual environment
+  - pip install -r requirements.txt # install dependencies
+
+run unit & integration tests:
+  script: # start necessary services, then run automated tests
+    - service mongodb start
+    - python3 tests/test_etl_job.py

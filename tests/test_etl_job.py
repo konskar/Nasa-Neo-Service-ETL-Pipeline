@@ -8,45 +8,73 @@ import hashlib
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, sum, avg, desc, to_date
 
-file_path = os.path.dirname( __file__ )
 
-config_dir =  os.path.abspath(os.path.join(file_path, '..', 'configs'))
-jobs_dir =  os.path.abspath(os.path.join(file_path, '..', 'jobs'))
+def Setup_Paths() -> None:
+    """ Define paths and import libraries according to the environment the script is running (WSL or Docker)
+    """
 
-sys.path.insert(1, config_dir)
-sys.path.insert(1, jobs_dir)
+    global api_test_dataset_abs_path, api_produced_dataset_abs_path, parquet_produced_dataset_abs_path, cfg, f
 
-import etl_config as cfg
-import functions as f
+    try: # WSL environment needs absolute paths
+
+        file_path = os.path.dirname( __file__ )
+
+        config_dir =  os.path.abspath(os.path.join(file_path, '..', 'configs'))
+        jobs_dir =  os.path.abspath(os.path.join(file_path, '..', 'jobs'))
+
+        sys.path.insert(1, config_dir)
+        sys.path.insert(1, jobs_dir)
+
+        import etl_config as cfg
+        import functions as f
+
+        assert(os.path.exists(cfg.absolute_paths["api_test_dataset_abs_path"]) == True), "api_test_dataset_abs_path don't exist"
+        assert(os.path.exists(cfg.absolute_paths["api_produced_dataset_abs_path"]) == True), "api_produced_dataset_abs_path don't exist"
+        assert(os.path.exists(cfg.absolute_paths["parquet_produced_dataset_abs_path"]) == True), "parquet_produced_dataset_abs_path don't exist"
+
+        api_test_dataset_abs_path = cfg.absolute_paths["api_test_dataset_abs_path"]
+        api_produced_dataset_abs_path = cfg.absolute_paths["api_produced_dataset_abs_path"]
+        parquet_produced_dataset_abs_path = cfg.absolute_paths["parquet_produced_dataset_abs_path"]
+
+    except: # Docker wsl_env_load:latest image works with relative paths
+
+        import functions as f
+        import etl_config as cfg
+
+        api_test_dataset_abs_path = cfg.testing["api_test_dataset"]
+        api_produced_dataset_abs_path = cfg.testing["api_produced_dataset"]
+        parquet_produced_dataset_abs_path = cfg.testing["parquet_produced_dataset"]
 
 
 def Produce_Files() -> None:
     """ Produce datasets that will be used in unit/integration tests
     """
 
+    # define global paths
+    global api_produced_dataset_abs_path, parquet_produced_dataset_abs_path, api_test_dataset_abs_path
+
     # Produce json file "api_produced_dataset" retrieving API data for the same period with the same schema as production grade test file
     f.collect_api_data(   start_date= '2022-07-27', \
                           end_date='2022-07-31', \
-                          api_response_path = cfg.absolute_paths["api_produced_dataset_abs_path"]
+                          api_response_path = api_produced_dataset_abs_path
                       )
     
     # Produce parquet file "api_produced_dataset" from 'api_produced_dataset' applying transformation
-    f.transform_and_write_to_parquet(   api_response_path = cfg.absolute_paths["api_produced_dataset_abs_path"], \
-                                        parquet_path = cfg.absolute_paths["parquet_produced_dataset_abs_path"]
+    f.transform_and_write_to_parquet(   api_response_path = api_produced_dataset_abs_path, \
+                                        parquet_path = parquet_produced_dataset_abs_path
                                     )
 
-    # Populate mongodb staging collection from 'api_produced_dataset'
+    # # Populate mongodb staging collection from 'api_produced_dataset'
     f.load_parquet_to_mongodb_staging(  database = cfg.testing["test_database"], \
                                         staging_collection = cfg.testing["test_staging_collection"], \
-                                        parquet_path = cfg.absolute_paths["parquet_produced_dataset_abs_path"]
+                                        parquet_path = parquet_produced_dataset_abs_path
                                      )
 
-    # Populate mongodb production collection from mongodb staging collection
+    # # Populate mongodb production collection from mongodb staging collection
     f.populate_mongodb_production(  database = cfg.testing["test_database"], \
                                     staging_collection = cfg.testing["test_staging_collection"], \
                                     production_collection = cfg.testing["test_production_collection"]
                                  )
-
 
 def Spark_Setup() -> None:
     """Start Spark Session and define dataframes that will be used in unit/integration tests
@@ -61,13 +89,13 @@ def Spark_Setup() -> None:
         .getOrCreate()
 
     # Production grade dataset we have tested it's schema and data, will compare the produced datasets with it
-    api_validated_df = spark.read.option("multiline", "true").json(cfg.absolute_paths["api_test_dataset_abs_path"])
+    api_validated_df = spark.read.option("multiline", "true").json(api_test_dataset_abs_path)
 
     # Dataframe of api_produced_dataset, should match api_validated_df
-    api_produced_df = spark.read.option("multiline", "true").json(cfg.absolute_paths["api_produced_dataset_abs_path"])
+    api_produced_df = spark.read.option("multiline", "true").json(api_produced_dataset_abs_path)
 
     # Dataframe of parquet file "api_produced_dataset", should include only the additional field 'velocity_in_miles_per_hour'
-    transformed_df = spark.read.parquet(cfg.absolute_paths["parquet_produced_dataset_abs_path"])
+    transformed_df = spark.read.parquet(parquet_produced_dataset_abs_path)
 
     # Dataframe of mongodb test staging collection
     mongodb_staging_df = spark.read.format("mongo") \
@@ -413,6 +441,8 @@ class Test_Populating_MongoDB_Production(unittest.TestCase):
 
 
 if __name__ == '__main__':
+
+    Setup_Paths()
 
     Produce_Files()
 
