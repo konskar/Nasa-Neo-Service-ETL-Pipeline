@@ -159,7 +159,7 @@ class Test_API_Client(unittest.TestCase):
     def test_row_count(self):
         api_produced_df_rows = api_produced_df.count()
         api_validated_df_rows = api_validated_df.count()
-        self.assertEqual(api_produced_df_rows, api_validated_df_rows)
+        self.assertEqual(api_produced_df_rows, api_validated_df_rows*2)
 
 
     def test_column_names(self):
