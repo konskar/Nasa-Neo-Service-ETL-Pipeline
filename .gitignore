@@ -1,13 +1,13 @@
-
 /.env
 /venv
 /input_output_files/http_cache.sqlite
 /input_output_files/*.json
 /input_output_files/*.parquet
 /test.py
-tests/produced_datasets/*
+tests/produced_datasets/*.parquet
 .vscode
 /jobs/__pycache__
 /configs/__pycache__
 /__pycache__
 tests/__pycache__
+/Dockerfile
