@@ -15,9 +15,6 @@ from airflow import AirflowException
 import smtplib, ssl
 import logging
 
-# # Local application imports
-# from nasa_neo_service_etl_dag.configs import etl_config as cfg
-
 # Local application imports
 # Import libraries according to the environment the script is running (WSL or Docker)
 try:  # WSL
@@ -32,8 +29,8 @@ except: # Docker wsl_env_load:latest image
 # Initialize objects
 task_logger = logging.getLogger('airflow.task')
 
-# Functions deceleration
 
+# Functions deceleration
 def log_task_duration(start_time: float, end_time: float) -> None:
     """Inject custom log entries to Airflow task log regarding execution time.
 

@@ -22,9 +22,6 @@ except: # Docker wsl_env_load:latest image
     import etl_config as cfg
 
 
-# from nasa_neo_service_etl_dag.jobs import functions as f
-# from nasa_neo_service_etl_dag.configs import etl_config as cfg
-
 # Variables
 local_tz = pendulum.timezone("Europe/Athens")
 
