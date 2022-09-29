@@ -15,8 +15,19 @@ from airflow import AirflowException
 import smtplib, ssl
 import logging
 
+# # Local application imports
+# from nasa_neo_service_etl_dag.configs import etl_config as cfg
+
 # Local application imports
-from nasa_neo_service_etl_dag.configs import etl_config as cfg
+# Import libraries according to the environment the script is running (WSL or Docker)
+try:  # WSL
+
+    from nasa_neo_service_etl_dag.configs import etl_config as cfg
+
+except: # Docker wsl_env_load:latest image
+    
+    import etl_config as cfg
+
 
 # Initialize objects
 task_logger = logging.getLogger('airflow.task')
