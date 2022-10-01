@@ -72,7 +72,9 @@ The basic project structure is as follows:
 
 The main Python module containing the ELT job (which will be sent to the Spark cluster) is `jobs/functions.py` and it's dag is `nasa_neo_service_dag.py`. Any external configuration parameters required by the job are stored in `configs/elt_config.py`. Unit & Integration tests are on file `tests/test_elt_job.py` and it can run either  manually or automatically via CI pipeline, see `.github/workflows/github-actions.yml`.
 
-## Installation & Setup
+## Setup
+
+To run this project need to:
 
 - Setup Linux environment either with [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) or Docker image or standalone distro. 
 - Setup [Python3](https://www.python.org/downloads/)
