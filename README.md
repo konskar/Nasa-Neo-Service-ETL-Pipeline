@@ -138,6 +138,7 @@ The main Python module containing the ELT job (which will be sent to the Spark c
 - [x] Add Tests
 - [x] Implement CI Pipeline
 - [x] Create architecture diagram
+- [ ] Add License
 - [ ] Dockerize the solution so dev environment can be easily reproduced
 - [ ] Improve README so someone can better understand the project and how to contribute 
 - [ ] Implement Continuos Delivery so code changes are deployed to test environment
