@@ -113,9 +113,11 @@ To run this project need to:
   pip install requirements.txt
   ```
 
-- Create mongo databases (nasa_gov, test_nasa_gov) and import json collections, see `resources/mongo` for queries and files to import.
+- Create mongo databases (nasa_gov, test_nasa_gov) and import json collections, see `resources/mongo` for queries and collections (json files) to import.
  <img src="https://user-images.githubusercontent.com/12799365/193393185-d7e645d5-7a5f-41da-8cb5-d646437f1f07.png" width=20% height=20% />
 
+
+## Usage
 
 - Start mongodb service
   ```
@@ -139,8 +141,6 @@ To run this project need to:
     ```bash
     ./actions-runner/run.sh
     ```
-
-## Usage
 
 - Trigger pipeline from Airflow UI without arguments to run with default date range
   
