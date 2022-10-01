@@ -18,7 +18,7 @@ The pipeline is defined and scheduled as an Airflow dag. By default dag runs dai
 
 ## Motivation
 
-Apply Big Data technologies, methodologies and tools creating an ELT pipeline for an intersting use case. 
+Apply Big Data technologies, methodologies and tools creating an end-to-end ELT pipeline for an intersting use case. 
 
 ## Table of Contents
 
