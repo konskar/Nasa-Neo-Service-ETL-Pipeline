@@ -1,0 +1,70 @@
+
+// -------------- create databases
+
+use nasa_gov
+use test_nasa_gov
+
+
+// -------------- nasa_gov queries
+
+
+use nasa_gov
+
+db.nasa_neo_service_staging.remove({})
+//db.nasa_neo_service_production.remove({})
+
+
+db.nasa_neo_service_staging.distinct("date")
+
+db.nasa_neo_service_production.distinct("date")
+
+db.nasa_neo_service_staging.find({})
+
+db.nasa_neo_service_production.find({})
+
+
+
+//------------------------------------ test_nasa_gov queries
+
+use test_nasa_gov
+
+db.test_nasa_neo_service_staging.remove({})
+//db.test_nasa_neo_service_production.remove({})
+
+
+db.test_nasa_neo_service_staging.distinct("date")
+
+db.test_nasa_neo_service_production.distinct("date")
+
+db.test_nasa_neo_service_staging.find({})
+
+db.test_nasa_neo_service_production.find({})
+
+
+//db.test_nasa_neo_service_production.deleteMany({
+//    date:{
+//            $gte:ISODate("2022-07-26T21:00:00.000+00:00"), 
+//            $lt:ISODate("2022-07-31T21:00:00.000+00:00")
+//         }
+//})
+
+//db.test_nasa_neo_service_production.deleteMany({
+//    date:{ $eq:ISODate("2022-07-25T21:00:00.000+00:00")}
+//})
+
+db.test_nasa_neo_service_production.find({
+    date:{
+            $gte:ISODate("2022-07-26T21:00:00.000+00:00"), 
+            $lt:ISODate("2022-07-31T21:00:00.000+00:00")
+         }
+})
+
+
+db.test_nasa_neo_service_production.find({
+    
+     $or: [
+             {date:{$lt:ISODate("2022-07-26T21:00:00.000+00:00")}},
+             {date:{$gte:ISODate("2022-07-31T21:00:00.000+00:00")}}
+         ]
+    
+})
