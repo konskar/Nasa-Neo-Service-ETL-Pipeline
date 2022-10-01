@@ -1,10 +1,11 @@
 
-from audioop import avg
+# Standard library imports
 import unittest
 import os
 import sys
-import hashlib
 
+# Third party imports
+import hashlib
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, sum, avg, desc, to_date
 
@@ -15,35 +16,50 @@ def Setup_Paths() -> None:
 
     global api_test_dataset_abs_path, api_produced_dataset_abs_path, parquet_produced_dataset_abs_path, cfg, f
 
-    try: # WSL environment needs absolute paths
+    file_path = os.path.dirname( __file__ )
 
-        file_path = os.path.dirname( __file__ )
+    config_dir =  os.path.abspath(os.path.join(file_path, '..', 'configs'))
+    jobs_dir =  os.path.abspath(os.path.join(file_path, '..', 'jobs'))
 
-        config_dir =  os.path.abspath(os.path.join(file_path, '..', 'configs'))
-        jobs_dir =  os.path.abspath(os.path.join(file_path, '..', 'jobs'))
+    sys.path.insert(1, config_dir)
+    sys.path.insert(1, jobs_dir)
 
-        sys.path.insert(1, config_dir)
-        sys.path.insert(1, jobs_dir)
+    import elt_config as cfg
+    import functions as f
 
-        import etl_config as cfg
-        import functions as f
+    api_test_dataset_abs_path = cfg.absolute_paths["api_test_dataset_abs_path"]
+    api_produced_dataset_abs_path = cfg.absolute_paths["api_produced_dataset_abs_path"]
+    parquet_produced_dataset_abs_path = cfg.absolute_paths["parquet_produced_dataset_abs_path"]
 
-        assert(os.path.exists(cfg.absolute_paths["api_test_dataset_abs_path"]) == True), "api_test_dataset_abs_path don't exist"
-        assert(os.path.exists(cfg.absolute_paths["api_produced_dataset_abs_path"]) == True), "api_produced_dataset_abs_path don't exist"
-        assert(os.path.exists(cfg.absolute_paths["parquet_produced_dataset_abs_path"]) == True), "parquet_produced_dataset_abs_path don't exist"
+    # try: # WSL environment needs absolute paths
 
-        api_test_dataset_abs_path = cfg.absolute_paths["api_test_dataset_abs_path"]
-        api_produced_dataset_abs_path = cfg.absolute_paths["api_produced_dataset_abs_path"]
-        parquet_produced_dataset_abs_path = cfg.absolute_paths["parquet_produced_dataset_abs_path"]
+    #     file_path = os.path.dirname( __file__ )
 
-    except: # Docker wsl_env_load:latest image works with relative paths
+    #     config_dir =  os.path.abspath(os.path.join(file_path, '..', 'configs'))
+    #     jobs_dir =  os.path.abspath(os.path.join(file_path, '..', 'jobs'))
 
-        import functions as f
-        import etl_config as cfg
+    #     sys.path.insert(1, config_dir)
+    #     sys.path.insert(1, jobs_dir)
 
-        api_test_dataset_abs_path = cfg.testing["api_test_dataset"]
-        api_produced_dataset_abs_path = cfg.testing["api_produced_dataset"]
-        parquet_produced_dataset_abs_path = cfg.testing["parquet_produced_dataset"]
+    #     import etl_config as cfg
+    #     import functions as f
+
+    #     assert(os.path.exists(cfg.absolute_paths["api_test_dataset_abs_path"]) == True), "api_test_dataset_abs_path don't exist"
+    #     assert(os.path.exists(cfg.absolute_paths["api_produced_dataset_abs_path"]) == True), "api_produced_dataset_abs_path don't exist"
+    #     assert(os.path.exists(cfg.absolute_paths["parquet_produced_dataset_abs_path"]) == True), "parquet_produced_dataset_abs_path don't exist"
+
+    #     api_test_dataset_abs_path = cfg.absolute_paths["api_test_dataset_abs_path"]
+    #     api_produced_dataset_abs_path = cfg.absolute_paths["api_produced_dataset_abs_path"]
+    #     parquet_produced_dataset_abs_path = cfg.absolute_paths["parquet_produced_dataset_abs_path"]
+
+    # except: # Docker wsl_env_load:latest image works with relative paths
+
+    #     import functions as f
+    #     import etl_config as cfg
+
+    #     api_test_dataset_abs_path = cfg.testing["api_test_dataset"]
+    #     api_produced_dataset_abs_path = cfg.testing["api_produced_dataset"]
+    #     parquet_produced_dataset_abs_path = cfg.testing["parquet_produced_dataset"]
 
 
 def Produce_Files() -> None:

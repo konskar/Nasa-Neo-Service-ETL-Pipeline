@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run automated tests
-        run: python3 tests/test_etl_job.py
+        run: python3 tests/test_elt_job.py
 
       - name: List files in the repository
         run: |
