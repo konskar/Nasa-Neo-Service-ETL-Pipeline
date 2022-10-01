@@ -1,0 +1,901 @@
+[{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fd9"
+  },
+  "estimated_diameter_max_in_km": 0.7944013596,
+  "estimated_diameter_min_in_km": 0.3552670883,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 136.6916555034,
+  "name": "154300 (2002 UO)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=2154300",
+  "neo_reference_id": "2154300",
+  "velocity_in_km_per_hour": 53173.3491041551,
+  "velocity_in_miles_per_hour": 33040.37710619796,
+  "date": {
+    "$date": {
+      "$numberLong": "1659128400000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148ffd"
+  },
+  "estimated_diameter_max_in_km": 0.3119176705,
+  "estimated_diameter_min_in_km": 0.1394938229,
+  "is_potentially_hazardous_asteroid": true,
+  "lunar_distance": 18.0929086926,
+  "name": "531944 (2013 CU83)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=2531944",
+  "neo_reference_id": "2531944",
+  "velocity_in_km_per_hour": 21165.8379310452,
+  "velocity_in_miles_per_hour": 13151.837881051488,
+  "date": {
+    "$date": {
+      "$numberLong": "1659128400000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fff"
+  },
+  "estimated_diameter_max_in_km": 0.0594346868,
+  "estimated_diameter_min_in_km": 0.02658,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 87.0073363439,
+  "name": "(2013 YT102)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3655732",
+  "neo_reference_id": "3655732",
+  "velocity_in_km_per_hour": 50539.9963421858,
+  "velocity_in_miles_per_hour": 31404.088067140332,
+  "date": {
+    "$date": {
+      "$numberLong": "1659128400000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82149000"
+  },
+  "estimated_diameter_max_in_km": 0.0748238376,
+  "estimated_diameter_min_in_km": 0.0334622374,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 52.9971354303,
+  "name": "(2014 MD42)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3674216",
+  "neo_reference_id": "3674216",
+  "velocity_in_km_per_hour": 34421.0760018644,
+  "velocity_in_miles_per_hour": 21388.258416354485,
+  "date": {
+    "$date": {
+      "$numberLong": "1659128400000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82149002"
+  },
+  "estimated_diameter_max_in_km": 0.5675968529,
+  "estimated_diameter_min_in_km": 0.2538370294,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 104.2098881048,
+  "name": "(2014 NE3)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3674338",
+  "neo_reference_id": "3674338",
+  "velocity_in_km_per_hour": 47047.8719689016,
+  "velocity_in_miles_per_hour": 29234.183253188356,
+  "date": {
+    "$date": {
+      "$numberLong": "1659128400000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82149004"
+  },
+  "estimated_diameter_max_in_km": 0.0156329154,
+  "estimated_diameter_min_in_km": 0.0069912523,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 145.964535352,
+  "name": "(2017 BR6)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3767008",
+  "neo_reference_id": "3767008",
+  "velocity_in_km_per_hour": 45411.9158888734,
+  "velocity_in_miles_per_hour": 28217.647587785155,
+  "date": {
+    "$date": {
+      "$numberLong": "1659128400000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82149006"
+  },
+  "estimated_diameter_max_in_km": 0.0334225806,
+  "estimated_diameter_min_in_km": 0.0149470324,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 193.8232255411,
+  "name": "(2020 AD1)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3973543",
+  "neo_reference_id": "3973543",
+  "velocity_in_km_per_hour": 68275.3519722586,
+  "velocity_in_miles_per_hour": 42424.3237303543,
+  "date": {
+    "$date": {
+      "$numberLong": "1659128400000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fd8"
+  },
+  "estimated_diameter_max_in_km": 0.0196806745,
+  "estimated_diameter_min_in_km": 0.0088014652,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 96.478282739,
+  "name": "(2019 AE3)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3837605",
+  "neo_reference_id": "3837605",
+  "velocity_in_km_per_hour": 30645.0451796047,
+  "velocity_in_miles_per_hour": 19041.94236829615,
+  "date": {
+    "$date": {
+      "$numberLong": "1659214800000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fde"
+  },
+  "estimated_diameter_max_in_km": 0.130028927,
+  "estimated_diameter_min_in_km": 0.058150704,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 165.5440779536,
+  "name": "(2019 SF2)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3843923",
+  "neo_reference_id": "3843923",
+  "velocity_in_km_per_hour": 21197.5829005505,
+  "velocity_in_miles_per_hour": 13171.563284497965,
+  "date": {
+    "$date": {
+      "$numberLong": "1659214800000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fe2"
+  },
+  "estimated_diameter_max_in_km": 0.4853331752,
+  "estimated_diameter_min_in_km": 0.2170475943,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 98.6664961198,
+  "name": "(2020 XM5)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=54100200",
+  "neo_reference_id": "54100200",
+  "velocity_in_km_per_hour": 56127.1663949605,
+  "velocity_in_miles_per_hour": 34875.793510003,
+  "date": {
+    "$date": {
+      "$numberLong": "1659214800000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fe5"
+  },
+  "estimated_diameter_max_in_km": 0.0835679943,
+  "estimated_diameter_min_in_km": 0.0373727432,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 168.3037838769,
+  "name": "(2021 PO1)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=54178145",
+  "neo_reference_id": "54178145",
+  "velocity_in_km_per_hour": 81347.8145002718,
+  "velocity_in_miles_per_hour": 50547.172843848384,
+  "date": {
+    "$date": {
+      "$numberLong": "1659214800000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fdb"
+  },
+  "estimated_diameter_max_in_km": 0.1803183724,
+  "estimated_diameter_min_in_km": 0.0806408277,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 121.5240740354,
+  "name": "523728 (2014 ON344)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=2523728",
+  "neo_reference_id": "2523728",
+  "velocity_in_km_per_hour": 49314.9008108549,
+  "velocity_in_miles_per_hour": 30642.849231741722,
+  "date": {
+    "$date": {
+      "$numberLong": "1659042000000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fdc"
+  },
+  "estimated_diameter_max_in_km": 0.7482383761,
+  "estimated_diameter_min_in_km": 0.3346223745,
+  "is_potentially_hazardous_asteroid": true,
+  "lunar_distance": 98.8175075147,
+  "name": "(2000 QS7)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3046124",
+  "neo_reference_id": "3046124",
+  "velocity_in_km_per_hour": 74801.3020682371,
+  "velocity_in_miles_per_hour": 46479.35986744255,
+  "date": {
+    "$date": {
+      "$numberLong": "1659042000000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fdd"
+  },
+  "estimated_diameter_max_in_km": 0.1879489824,
+  "estimated_diameter_min_in_km": 0.0840533402,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 163.3932035158,
+  "name": "(2002 MY)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3127413",
+  "neo_reference_id": "3127413",
+  "velocity_in_km_per_hour": 50443.1045534772,
+  "velocity_in_miles_per_hour": 31343.88231949868,
+  "date": {
+    "$date": {
+      "$numberLong": "1659042000000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fdf"
+  },
+  "estimated_diameter_max_in_km": 0.8204270649,
+  "estimated_diameter_min_in_km": 0.3669061375,
+  "is_potentially_hazardous_asteroid": true,
+  "lunar_distance": 145.99511153,
+  "name": "(2003 VE1)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3165472",
+  "neo_reference_id": "3165472",
+  "velocity_in_km_per_hour": 54153.9451214514,
+  "velocity_in_miles_per_hour": 33649.691034061376,
+  "date": {
+    "$date": {
+      "$numberLong": "1659042000000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fe0"
+  },
+  "estimated_diameter_max_in_km": 0.1472448042,
+  "estimated_diameter_min_in_km": 0.0658498783,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 127.4878983096,
+  "name": "(2006 FH36)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3329255",
+  "neo_reference_id": "3329255",
+  "velocity_in_km_per_hour": 54281.7272907119,
+  "velocity_in_miles_per_hour": 33729.09116835694,
+  "date": {
+    "$date": {
+      "$numberLong": "1659042000000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fe1"
+  },
+  "estimated_diameter_max_in_km": 0.0472106499,
+  "estimated_diameter_min_in_km": 0.0211132445,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 134.9075072368,
+  "name": "(2006 UZ215)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3354955",
+  "neo_reference_id": "3354955",
+  "velocity_in_km_per_hour": 27207.3843702698,
+  "velocity_in_miles_per_hour": 16905.879633538916,
+  "date": {
+    "$date": {
+      "$numberLong": "1659042000000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fe3"
+  },
+  "estimated_diameter_max_in_km": 0.8318403423,
+  "estimated_diameter_min_in_km": 0.3720103103,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 107.3732756661,
+  "name": "(2007 TW68)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3388399",
+  "neo_reference_id": "3388399",
+  "velocity_in_km_per_hour": 28015.9032334108,
+  "velocity_in_miles_per_hour": 17408.269808047702,
+  "date": {
+    "$date": {
+      "$numberLong": "1659042000000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fe4"
+  },
+  "estimated_diameter_max_in_km": 0.1492931834,
+  "estimated_diameter_min_in_km": 0.0667659413,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 192.5217985777,
+  "name": "(2012 YK)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3621604",
+  "neo_reference_id": "3621604",
+  "velocity_in_km_per_hour": 62876.8115667504,
+  "velocity_in_miles_per_hour": 39069.82728004327,
+  "date": {
+    "$date": {
+      "$numberLong": "1659042000000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fe6"
+  },
+  "estimated_diameter_max_in_km": 0.0472106499,
+  "estimated_diameter_min_in_km": 0.0211132445,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 129.9186159631,
+  "name": "(2014 OC4)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3674962",
+  "neo_reference_id": "3674962",
+  "velocity_in_km_per_hour": 53509.8773781072,
+  "velocity_in_miles_per_hour": 33249.48601631185,
+  "date": {
+    "$date": {
+      "$numberLong": "1659042000000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fe7"
+  },
+  "estimated_diameter_max_in_km": 0.0375007522,
+  "estimated_diameter_min_in_km": 0.0167708462,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 187.9517067268,
+  "name": "(2015 XX128)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3736207",
+  "neo_reference_id": "3736207",
+  "velocity_in_km_per_hour": 26955.5736808389,
+  "velocity_in_miles_per_hour": 16749.411773636548,
+  "date": {
+    "$date": {
+      "$numberLong": "1659042000000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fe8"
+  },
+  "estimated_diameter_max_in_km": 0.2157943048,
+  "estimated_diameter_min_in_km": 0.096506147,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 6.9934021275,
+  "name": "(2016 CZ31)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3742128",
+  "neo_reference_id": "3742128",
+  "velocity_in_km_per_hour": 56095.0550912588,
+  "velocity_in_miles_per_hour": 34855.84047711057,
+  "date": {
+    "$date": {
+      "$numberLong": "1659042000000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fe9"
+  },
+  "estimated_diameter_max_in_km": 0.2060819612,
+  "estimated_diameter_min_in_km": 0.0921626549,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 134.7567389669,
+  "name": "(2017 RE110)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3838941",
+  "neo_reference_id": "3838941",
+  "velocity_in_km_per_hour": 20254.9980365942,
+  "velocity_in_miles_per_hour": 12585.868384996575,
+  "date": {
+    "$date": {
+      "$numberLong": "1659042000000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fea"
+  },
+  "estimated_diameter_max_in_km": 0.1081533507,
+  "estimated_diameter_min_in_km": 0.0483676488,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 180.3377556169,
+  "name": "(2018 VB1)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3835962",
+  "neo_reference_id": "3835962",
+  "velocity_in_km_per_hour": 45903.4492176594,
+  "velocity_in_miles_per_hour": 28523.07214382624,
+  "date": {
+    "$date": {
+      "$numberLong": "1659042000000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148feb"
+  },
+  "estimated_diameter_max_in_km": 0.0259441818,
+  "estimated_diameter_min_in_km": 0.0116025908,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 160.0622185721,
+  "name": "(2019 DQ)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3838839",
+  "neo_reference_id": "3838839",
+  "velocity_in_km_per_hour": 43582.6066614156,
+  "velocity_in_miles_per_hour": 27080.967883810474,
+  "date": {
+    "$date": {
+      "$numberLong": "1659042000000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fec"
+  },
+  "estimated_diameter_max_in_km": 0.0027166893,
+  "estimated_diameter_min_in_km": 0.0012149404,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 80.1482718654,
+  "name": "(2019 VB5)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3892775",
+  "neo_reference_id": "3892775",
+  "velocity_in_km_per_hour": 18862.4065461639,
+  "velocity_in_miles_per_hour": 11720.552417996409,
+  "date": {
+    "$date": {
+      "$numberLong": "1659042000000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fed"
+  },
+  "estimated_diameter_max_in_km": 0.0567596853,
+  "estimated_diameter_min_in_km": 0.0253837029,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 193.7821369104,
+  "name": "(2019 YD1)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3943330",
+  "neo_reference_id": "3943330",
+  "velocity_in_km_per_hour": 26303.6921656727,
+  "velocity_in_miles_per_hour": 16344.351504676211,
+  "date": {
+    "$date": {
+      "$numberLong": "1659042000000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fee"
+  },
+  "estimated_diameter_max_in_km": 0.0106669431,
+  "estimated_diameter_min_in_km": 0.004770402,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 148.4052748514,
+  "name": "(2020 AW)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3972422",
+  "neo_reference_id": "3972422",
+  "velocity_in_km_per_hour": 42206.8375808345,
+  "velocity_in_miles_per_hour": 26226.104874440716,
+  "date": {
+    "$date": {
+      "$numberLong": "1659042000000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fef"
+  },
+  "estimated_diameter_max_in_km": 0.0682401509,
+  "estimated_diameter_min_in_km": 0.0305179233,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 133.3385096965,
+  "name": "(2020 KK)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=54017063",
+  "neo_reference_id": "54017063",
+  "velocity_in_km_per_hour": 77865.170451863,
+  "velocity_in_miles_per_hour": 48383.158828844564,
+  "date": {
+    "$date": {
+      "$numberLong": "1659042000000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148ff0"
+  },
+  "estimated_diameter_max_in_km": 0.0450858206,
+  "estimated_diameter_min_in_km": 0.0201629919,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 28.8970262405,
+  "name": "(2021 GS12)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=54137509",
+  "neo_reference_id": "54137509",
+  "velocity_in_km_per_hour": 17097.1231094232,
+  "velocity_in_miles_per_hour": 10623.656483625402,
+  "date": {
+    "$date": {
+      "$numberLong": "1659042000000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148ff2"
+  },
+  "estimated_diameter_max_in_km": 0.1472448042,
+  "estimated_diameter_min_in_km": 0.0658498783,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 127.4878982707,
+  "name": "613400 (2006 FH36)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=2613400",
+  "neo_reference_id": "2613400",
+  "velocity_in_km_per_hour": 54281.7272867749,
+  "velocity_in_miles_per_hour": 33729.091165910606,
+  "date": {
+    "$date": {
+      "$numberLong": "1659042000000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148fda"
+  },
+  "estimated_diameter_max_in_km": 3.1771665298,
+  "estimated_diameter_min_in_km": 1.4208720673,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 183.3904558345,
+  "name": "163693 Atira (2003 CP20)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=2163693",
+  "neo_reference_id": "2163693",
+  "velocity_in_km_per_hour": 71433.4088693149,
+  "velocity_in_miles_per_hour": 44386.648702535065,
+  "date": {
+    "$date": {
+      "$numberLong": "1658869200000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148ffc"
+  },
+  "estimated_diameter_max_in_km": 0.4149922428,
+  "estimated_diameter_min_in_km": 0.185590173,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 143.2679625727,
+  "name": "288592 (2004 JW20)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=2288592",
+  "neo_reference_id": "2288592",
+  "velocity_in_km_per_hour": 90263.0776297788,
+  "velocity_in_miles_per_hour": 56086.85880989328,
+  "date": {
+    "$date": {
+      "$numberLong": "1658869200000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148ffe"
+  },
+  "estimated_diameter_max_in_km": 0.3266178974,
+  "estimated_diameter_min_in_km": 0.1460679643,
+  "is_potentially_hazardous_asteroid": true,
+  "lunar_distance": 26.6040028392,
+  "name": "(2004 PS42)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3249347",
+  "neo_reference_id": "3249347",
+  "velocity_in_km_per_hour": 46354.2072435958,
+  "velocity_in_miles_per_hour": 28803.16010916037,
+  "date": {
+    "$date": {
+      "$numberLong": "1658869200000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82149001"
+  },
+  "estimated_diameter_max_in_km": 1.4929318344,
+  "estimated_diameter_min_in_km": 0.6676594135,
+  "is_potentially_hazardous_asteroid": true,
+  "lunar_distance": 114.4902853055,
+  "name": "(2006 DU62)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3324630",
+  "neo_reference_id": "3324630",
+  "velocity_in_km_per_hour": 68775.4937615008,
+  "velocity_in_miles_per_hour": 42735.09733407751,
+  "date": {
+    "$date": {
+      "$numberLong": "1658869200000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82149003"
+  },
+  "estimated_diameter_max_in_km": 0.2477650126,
+  "estimated_diameter_min_in_km": 0.1108038821,
+  "is_potentially_hazardous_asteroid": true,
+  "lunar_distance": 118.5198691252,
+  "name": "(2011 TX8)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3581669",
+  "neo_reference_id": "3581669",
+  "velocity_in_km_per_hour": 56772.7138375258,
+  "velocity_in_miles_per_hour": 35276.91796993725,
+  "date": {
+    "$date": {
+      "$numberLong": "1658869200000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82149005"
+  },
+  "estimated_diameter_max_in_km": 0.0284472297,
+  "estimated_diameter_min_in_km": 0.0127219879,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 71.0898370193,
+  "name": "(2015 DU)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3710715",
+  "neo_reference_id": "3710715",
+  "velocity_in_km_per_hour": 12471.9719037708,
+  "velocity_in_miles_per_hour": 7749.7216538179655,
+  "date": {
+    "$date": {
+      "$numberLong": "1658869200000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82149007"
+  },
+  "estimated_diameter_max_in_km": 0.0098637028,
+  "estimated_diameter_min_in_km": 0.004411182,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 72.243079373,
+  "name": "(2017 HV2)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3774067",
+  "neo_reference_id": "3774067",
+  "velocity_in_km_per_hour": 30704.9765901381,
+  "velocity_in_miles_per_hour": 19079.1820087907,
+  "date": {
+    "$date": {
+      "$numberLong": "1658869200000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82149008"
+  },
+  "estimated_diameter_max_in_km": 0.0986370281,
+  "estimated_diameter_min_in_km": 0.04411182,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 125.300958048,
+  "name": "(2019 SP2)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3844004",
+  "neo_reference_id": "3844004",
+  "velocity_in_km_per_hour": 22596.6977611453,
+  "velocity_in_miles_per_hour": 14040.932684540616,
+  "date": {
+    "$date": {
+      "$numberLong": "1658869200000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82149009"
+  },
+  "estimated_diameter_max_in_km": 0.0337318359,
+  "estimated_diameter_min_in_km": 0.0150853356,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 137.865643266,
+  "name": "(2021 NM)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=54165800",
+  "neo_reference_id": "54165800",
+  "velocity_in_km_per_hour": 40415.4561753515,
+  "velocity_in_miles_per_hour": 25112.992419134338,
+  "date": {
+    "$date": {
+      "$numberLong": "1658869200000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148ff1"
+  },
+  "estimated_diameter_max_in_km": 0.4385710684,
+  "estimated_diameter_min_in_km": 0.1961349444,
+  "is_potentially_hazardous_asteroid": true,
+  "lunar_distance": 116.4239228878,
+  "name": "41429 (2000 GE2)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=2041429",
+  "neo_reference_id": "2041429",
+  "velocity_in_km_per_hour": 51750.9245766449,
+  "velocity_in_miles_per_hour": 32156.52375511442,
+  "date": {
+    "$date": {
+      "$numberLong": "1658955600000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148ff3"
+  },
+  "estimated_diameter_max_in_km": 2.0419259045,
+  "estimated_diameter_min_in_km": 0.9131770255,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 170.361732711,
+  "name": "162483 (2000 PJ5)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=2162483",
+  "neo_reference_id": "2162483",
+  "velocity_in_km_per_hour": 99613.0888478705,
+  "velocity_in_miles_per_hour": 61896.68463049014,
+  "date": {
+    "$date": {
+      "$numberLong": "1658955600000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148ff4"
+  },
+  "estimated_diameter_max_in_km": 0.3266178974,
+  "estimated_diameter_min_in_km": 0.1460679643,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 134.9177278228,
+  "name": "(2006 FK)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3328632",
+  "neo_reference_id": "3328632",
+  "velocity_in_km_per_hour": 34508.5565046326,
+  "velocity_in_miles_per_hour": 21442.616263840064,
+  "date": {
+    "$date": {
+      "$numberLong": "1658955600000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148ff5"
+  },
+  "estimated_diameter_max_in_km": 0.0567596853,
+  "estimated_diameter_min_in_km": 0.0253837029,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 108.0355117946,
+  "name": "(2015 KT120)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3720000",
+  "neo_reference_id": "3720000",
+  "velocity_in_km_per_hour": 26051.8939113925,
+  "velocity_in_miles_per_hour": 16187.89137161587,
+  "date": {
+    "$date": {
+      "$numberLong": "1658955600000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148ff6"
+  },
+  "estimated_diameter_max_in_km": 0.0820427065,
+  "estimated_diameter_min_in_km": 0.0366906138,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 165.671861964,
+  "name": "(2015 VE106)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3734647",
+  "neo_reference_id": "3734647",
+  "velocity_in_km_per_hour": 22052.0993681117,
+  "velocity_in_miles_per_hour": 13702.535036462936,
+  "date": {
+    "$date": {
+      "$numberLong": "1658955600000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148ff7"
+  },
+  "estimated_diameter_max_in_km": 0.4943561926,
+  "estimated_diameter_min_in_km": 0.2210828104,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 111.6176570779,
+  "name": "(2017 FK102)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3773050",
+  "neo_reference_id": "3773050",
+  "velocity_in_km_per_hour": 83216.3316301051,
+  "velocity_in_miles_per_hour": 51708.21520133004,
+  "date": {
+    "$date": {
+      "$numberLong": "1658955600000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148ff8"
+  },
+  "estimated_diameter_max_in_km": 0.0196806745,
+  "estimated_diameter_min_in_km": 0.0088014652,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 66.281609638,
+  "name": "(2020 VA4)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=54087767",
+  "neo_reference_id": "54087767",
+  "velocity_in_km_per_hour": 18984.7375989759,
+  "velocity_in_miles_per_hour": 11796.565386613252,
+  "date": {
+    "$date": {
+      "$numberLong": "1658955600000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148ff9"
+  },
+  "estimated_diameter_max_in_km": 0.0364787526,
+  "estimated_diameter_min_in_km": 0.0163137941,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 70.9576180977,
+  "name": "(2022 DK1)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=54248341",
+  "neo_reference_id": "54248341",
+  "velocity_in_km_per_hour": 26002.3770292174,
+  "velocity_in_miles_per_hour": 16157.123017021846,
+  "date": {
+    "$date": {
+      "$numberLong": "1658955600000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148ffa"
+  },
+  "estimated_diameter_max_in_km": 0.0758647409,
+  "estimated_diameter_min_in_km": 0.0339277435,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 76.9393002338,
+  "name": "(2022 ED1)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=54248961",
+  "neo_reference_id": "54248961",
+  "velocity_in_km_per_hour": 24127.7820921284,
+  "velocity_in_miles_per_hour": 14992.304086367916,
+  "date": {
+    "$date": {
+      "$numberLong": "1658955600000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "6337c3a8bdc7b85d82148ffb"
+  },
+  "estimated_diameter_max_in_km": 0.3326901775,
+  "estimated_diameter_min_in_km": 0.1487835705,
+  "is_potentially_hazardous_asteroid": false,
+  "lunar_distance": 134.9177225713,
+  "name": "613398 (2006 FK)",
+  "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=2613398",
+  "neo_reference_id": "2613398",
+  "velocity_in_km_per_hour": 34508.5475728263,
+  "velocity_in_miles_per_hour": 21442.61071387465,
+  "date": {
+    "$date": {
+      "$numberLong": "1658955600000"
+    }
+  }
+}]
