@@ -1,5 +1,5 @@
 # A Python ELT Pipeline for NASA's Near Earth Object Web Service
-[![Continous-Integration-Pipeline](https://github.com/konskar/Nasa-Neo-Service-ETL-DAG/actions/workflows/github-actions.yml/badge.svg?branch=main&event=push)](https://github.com/konskar/Nasa-Neo-Service-ETL-DAG/actions/workflows/github-actions.yml)
+[![Continous-Integration-Pipeline](https://github.com/konskar/Nasa-Neo-Service-elt-DAG/actions/workflows/github-actions.yml/badge.svg?branch=main&event=push)](https://github.com/konskar/Nasa-Neo-Service-elt-DAG/actions/workflows/github-actions.yml)
 
 An end-to-end Big Data Engineering solution that consumes satellite data from NASA's Near Earth Object Web Service regarding asteroids in near orbit to earth such as volume, estimated diameter, potentially hazardous indicator, velocity and lunar distance, stores them in analytical data store and expose the data through BI dashboards.
 
@@ -41,7 +41,7 @@ The basic project structure is as follows:
 ```bash
 .
 ├── configs
-│   └── etl_config.py
+│   └── elt_config.py
 ├── input_output_files
 │   ├── http_cache.sqlite
 │   ├── nasa_neo_api_landing.parquet
@@ -55,7 +55,7 @@ The basic project structure is as follows:
     │   └── nasa_neo_api_response.json
     ├── test_datasets
     │   └── nasa_neo_api_response_27.07.2022-31.07.2022.json
-    └── test_etl_job.py
+    └── test_elt_job.py
 ├── requirements.txt
 ├── resources
 │   ├── architecture_diagram.drawio
@@ -69,7 +69,7 @@ The basic project structure is as follows:
 ├── README.md
 ```
 
-The main Python module containing the ELT job (which will be sent to the Spark cluster) is `jobs/functions.py` and it's dag is `nasa_neo_service_dag.py`. Any external configuration parameters required by the job are stored in `configs/etl_config.py`. Unit & Integration tests are on file `tests/test_etl_job.py` and it can run either  manually or automatically via CI pipeline, see `.github/workflows/github-actions.yml`.
+The main Python module containing the ELT job (which will be sent to the Spark cluster) is `jobs/functions.py` and it's dag is `nasa_neo_service_dag.py`. Any external configuration parameters required by the job are stored in `configs/elt_config.py`. Unit & Integration tests are on file `tests/test_elt_job.py` and it can run either  manually or automatically via CI pipeline, see `.github/workflows/github-actions.yml`.
 
 ## Installation & Setup
 
@@ -82,7 +82,7 @@ The main Python module containing the ELT job (which will be sent to the Spark c
 - Setup [Metabase](https://www.metabase.com/docs/latest/installation-and-operation/installing-metabase)
 - Setup [Self-hosted github actions runner](https://docs.github.com/en/actions/hosting-your-own-runners/adding-self-hosted-runners)
 
-- Create `.env` file with your secrets/paths (used by configs/etl_config.py), see `resources/.env_sample` for reference.
+- Create `.env` file with your secrets/paths (used by configs/elt_config.py), see `resources/.env_sample` for reference.
 
 - Install python dependencies (requirements.txt)
   ```bash
