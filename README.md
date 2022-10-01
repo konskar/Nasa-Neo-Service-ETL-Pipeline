@@ -1,5 +1,6 @@
 # A Python ELT Pipeline for NASA's Near Earth Object Web Service
-[![Continous-Integration-Pipeline](https://github.com/konskar/Nasa-Neo-Service-elt-DAG/actions/workflows/github-actions.yml/badge.svg?branch=main&event=push)](https://github.com/konskar/Nasa-Neo-Service-elt-DAG/actions/workflows/github-actions.yml)
+
+[![Continous-Integration-Pipeline](https://github.com/konskar/Nasa-Neo-Service-ETL-Pipeline/actions/workflows/github-actions.yml/badge.svg?branch=main&event=push)](https://github.com/konskar/Nasa-Neo-Service-ETL-Pipeline/actions/workflows/github-actions.yml)
 
 An end-to-end Big Data Engineering solution that consumes satellite data from NASA's Near Earth Object Web Service regarding asteroids in near orbit to earth such as volume, estimated diameter, potentially hazardous indicator, velocity and lunar distance, stores them in analytical data store and expose the data through BI dashboards.
 
