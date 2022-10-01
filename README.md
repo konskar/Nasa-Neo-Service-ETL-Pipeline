@@ -30,6 +30,7 @@ Apply Big Data technologies and tools creating an ELT pipeline for an intersting
 - [Usage](#usage)
 - [Backlog](#backlog)
 - [Contributing](#contributing)
+- [Licence](#licence)
 - [Links](#links)
 
 ## Architecture
@@ -168,7 +169,7 @@ Please make sure to update tests as appropriate.
 
 ## Licence
 
-
+This project uses the license: [BSD 3-Clause License](https://opensource.org/licenses/BSD-3-Clause)
 
 ## Links
 - NASA APIs: https://api.nasa.gov/
