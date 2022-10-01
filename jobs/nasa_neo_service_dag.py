@@ -11,7 +11,7 @@ import pendulum
 
 # Local application imports
 from nasa_neo_service_etl_dag.jobs import functions as f
-from nasa_neo_service_etl_dag.configs import etl_config as cfg
+from nasa_neo_service_etl_dag.configs import elt_config as cfg
 
 
 # Variables

@@ -24,7 +24,7 @@ def Setup_Paths() -> None:
     sys.path.insert(1, config_dir)
     sys.path.insert(1, jobs_dir)
 
-    import etl_config as cfg
+    import elt_config as cfg
     import functions as f
 
     api_test_dataset_abs_path = cfg.absolute_paths["api_test_dataset_abs_path"]
