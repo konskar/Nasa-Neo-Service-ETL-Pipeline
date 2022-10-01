@@ -2,6 +2,7 @@
 
 [![Continous-Integration-Pipeline](https://github.com/konskar/Nasa-Neo-Service-ETL-Pipeline/actions/workflows/github-actions.yml/badge.svg?branch=main&event=push)](https://github.com/konskar/Nasa-Neo-Service-ETL-Pipeline/actions/workflows/github-actions.yml)
 
+## Description
 An end-to-end Big Data Engineering solution that consumes satellite data from NASA's Near Earth Object Web Service regarding asteroids in near orbit to earth such as volume, estimated diameter, potentially hazardous indicator, velocity and lunar distance, stores them in analytical data store and expose the data through BI dashboards.
 
 **Solution Overview**:
@@ -15,16 +16,28 @@ Development tools are setup on on-premises Ubuntu instance through Windows Subsy
 
 The pipeline is defined and scheduled as an Airflow dag. By default dag runs daily and loads last 3 days (from day-1 to day-3) but can run it for custom date range  through Airflow arguments.
 
+## Table of Contents
+
+- [Architecture](#architecture)
+  - [Technologies](#technologies)
+  - [Concepts Practised](#concepts-practised)
+- [Project Structure](#project-structure)
+- [Setup](#setup)
+- [Usage](#usage)
+- [Backlog](#backlog)
+- [Contributing](#contributing)
+- [Links](#links)
+
 ## Architecture
 
 <kbd>
   <img src="https://user-images.githubusercontent.com/12799365/193200674-a634d19a-cc83-4889-954d-6ed3cd56099b.png" />
 </kbd>
 
-### Technologies
+#### Technologies
 `Python3`, `PySpark`, `Parquet`, `Airflow`, `MongoDB`, `Metabase`, `Github Actions`, `Linux`
 
-### Concepts Practised
+#### Concepts Practised
 
 - Consuming REST API data
 - Data Wrangling
@@ -132,7 +145,7 @@ To run this project need to:
 <img src="https://user-images.githubusercontent.com/12799365/193385775-a4429d8b-2ad2-4726-a645-d627760ce03b.png" width=50% height=50% />
 
 - Access Metabase dashboard: http://localhost:3000/
-<img src="https://user-images.githubusercontent.com/12799365/193201434-ac7c925f-7cd7-4c02-91e7-6c666f245a0a.png" width=50% height=50% />
+<img src="https://user-images.githubusercontent.com/12799365/193413280-c30fceaa-35cd-4234-8e03-1866a0b833ea.png" width=50% height=50% />
 
 ## Backlog
 - [x] Airflow alerting on success & failure
