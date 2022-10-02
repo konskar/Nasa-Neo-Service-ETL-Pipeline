@@ -3,10 +3,10 @@
 [![Continous-Integration-Pipeline](https://github.com/konskar/Nasa-Neo-Service-ETL-Pipeline/actions/workflows/github-actions.yml/badge.svg?branch=main&event=push)](https://github.com/konskar/Nasa-Neo-Service-ETL-Pipeline/actions/workflows/github-actions.yml) [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 ## Description
-An end-to-end Big Data Engineering solution that consumes satellite data from NASA's Near Earth Object Web Service regarding asteroids in near orbit to earth such as volume, estimated diameter, potentially hazardous indicator, velocity and lunar distance, stores them in analytical data store and expose the data through BI dashboards.
+An end-to-end Big Data Engineering solution that consumes satellite data from [NASA's Near Earth Object Web Service](https://api.nasa.gov/) regarding asteroids in near orbit to earth such as volume, estimated diameter, potentially hazardous indicator, velocity and lunar distance, stores them in analytical data store and expose the data through BI dashboards.
 
 **Solution Overview**:
-1. Ingest Web Service data from REST API with Python client and store them as Json file for further downstream processing.
+1. Ingest Web Service data from REST API with Python client and store them as Json file for further downstream processing. <br /> NeoWs endpoint example: https://api.nasa.gov/neo/rest/v1/feed?start_date=2022-09-28&end_date=2022-09-29&api_key=DEMO_KEY
 2. With PySpark load Json file to dataframe, create 'velocity_in_miles_per_hour' calculated metric and store the produced dataframe as Parquet file.
 3. Write Parquet file to MongoDB staging collection with PySpark.
 4. Populate MongoDB production collection from staging collection with MongoDB Query Language (MQL) queries.
@@ -31,7 +31,6 @@ Apply Big Data technologies, methodologies and tools creating an end-to-end ELT 
 - [Backlog](#backlog)
 - [Contributing](#contributing)
 - [Licence](#licence)
-- [Links](#links)
 
 ## Architecture
 
@@ -158,7 +157,6 @@ To run this project need to:
 - [x] Add Tests
 - [x] Implement CI Pipeline
 - [x] Create architecture diagram
-- [ ] Add License
 - [ ] Dockerize the solution so dev environment can be easily reproduced
 - [ ] Improve README so someone can better understand the project and how to contribute 
 - [ ] Implement Continuos Delivery so code changes are deployed to test environment
@@ -170,8 +168,3 @@ Please make sure to update tests as appropriate.
 ## Licence
 
 This project uses the license: [BSD 3-Clause License](https://opensource.org/licenses/BSD-3-Clause)
-
-## Links
-- NASA APIs: https://api.nasa.gov/
-- NeoWs endpoint example: https://api.nasa.gov/neo/rest/v1/feed?start_date=2022-09-28&end_date=2022-09-29&api_key=DEMO_KEY
-- MongoDB import data: https://www.mongodb.com/docs/compass/current/import-export/
