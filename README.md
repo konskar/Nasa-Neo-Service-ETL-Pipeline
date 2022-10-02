@@ -39,13 +39,13 @@ Apply Big Data technologies, methodologies and tools creating an end-to-end ELT 
 </kbd>
 
 #### Technologies
-`Python3`, `PySpark`, `Parquet`, `Airflow`, `MongoDB`, `Metabase`, `Github Actions`, `Linux`
+`Linux`, `Python3`, `PySpark`, `Parquet`, `Airflow`, `MongoDB`, `Metabase`, `Github Actions`
 
 #### Concepts Practised
 
 - Consuming REST API data
 - Data Wrangling
-- Versioning
+- Version Control
 - Configurable Pipelines
 - Observability
 - Logging
@@ -104,7 +104,7 @@ To run this project need to:
 
 - Create `.env` file with your secrets/paths (used by configs/elt_config.py), see `resources/.env_sample` for reference.
 
-- Install python dependencies (requirements.txt)
+- Install pip dependencies
   ```bash
   pip install virtualenv
   virtualenv venv # create virtual environment to isolate dependancies
