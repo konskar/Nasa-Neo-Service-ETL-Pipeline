@@ -31,36 +31,6 @@ def Setup_Paths() -> None:
     api_produced_dataset_abs_path = cfg.absolute_paths["api_produced_dataset_abs_path"]
     parquet_produced_dataset_abs_path = cfg.absolute_paths["parquet_produced_dataset_abs_path"]
 
-    # try: # WSL environment needs absolute paths
-
-    #     file_path = os.path.dirname( __file__ )
-
-    #     config_dir =  os.path.abspath(os.path.join(file_path, '..', 'configs'))
-    #     jobs_dir =  os.path.abspath(os.path.join(file_path, '..', 'jobs'))
-
-    #     sys.path.insert(1, config_dir)
-    #     sys.path.insert(1, jobs_dir)
-
-    #     import etl_config as cfg
-    #     import functions as f
-
-    #     assert(os.path.exists(cfg.absolute_paths["api_test_dataset_abs_path"]) == True), "api_test_dataset_abs_path don't exist"
-    #     assert(os.path.exists(cfg.absolute_paths["api_produced_dataset_abs_path"]) == True), "api_produced_dataset_abs_path don't exist"
-    #     assert(os.path.exists(cfg.absolute_paths["parquet_produced_dataset_abs_path"]) == True), "parquet_produced_dataset_abs_path don't exist"
-
-    #     api_test_dataset_abs_path = cfg.absolute_paths["api_test_dataset_abs_path"]
-    #     api_produced_dataset_abs_path = cfg.absolute_paths["api_produced_dataset_abs_path"]
-    #     parquet_produced_dataset_abs_path = cfg.absolute_paths["parquet_produced_dataset_abs_path"]
-
-    # except: # Docker wsl_env_load:latest image works with relative paths
-
-    #     import functions as f
-    #     import etl_config as cfg
-
-    #     api_test_dataset_abs_path = cfg.testing["api_test_dataset"]
-    #     api_produced_dataset_abs_path = cfg.testing["api_produced_dataset"]
-    #     parquet_produced_dataset_abs_path = cfg.testing["parquet_produced_dataset"]
-
 
 def Produce_Files() -> None:
     """ Produce datasets that will be used in unit/integration tests
