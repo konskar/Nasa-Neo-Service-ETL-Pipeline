@@ -5,8 +5,6 @@ from datetime import datetime, timedelta
 # Third party imports
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-from airflow.operators.email import EmailOperator
-from airflow.models.baseoperator import chain
 import pendulum
 
 # Local application imports
