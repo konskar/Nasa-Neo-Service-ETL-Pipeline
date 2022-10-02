@@ -7,7 +7,7 @@ import sys
 # Third party imports
 import hashlib
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, sum, avg, desc, to_date
+from pyspark.sql.functions import col, sum, avg, to_date
 
 
 def Setup_Paths() -> None:
