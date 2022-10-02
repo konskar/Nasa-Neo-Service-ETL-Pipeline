@@ -24,7 +24,7 @@ Apply Big Data technologies, methodologies and tools creating an end-to-end ELT 
 
 - [Architecture](#architecture)
   - [Technologies](#technologies)
-  - [Concepts Practised](#concepts-practised)
+  - [Applied Concepts](#applied-concepts)
 - [Project Structure](#project-structure)
 - [Setup](#setup)
 - [Usage](#usage)
@@ -41,17 +41,17 @@ Apply Big Data technologies, methodologies and tools creating an end-to-end ELT 
 #### Technologies
 `Linux`, `Python3`, `PySpark`, `Parquet`, `Airflow`, `MongoDB`, `Metabase`, `Github Actions`
 
-#### Concepts Practised
+#### Applied Concepts
 
 - Consuming REST API data
 - Data Wrangling
-- Version Control
 - Configurable Pipelines
 - Observability
-- Logging
+- Reproducibility
 - Unit & Integration Testing
-- CI Pipeline
 - Reporting
+- Version Control
+- CI Pipeline – Test Automation
 
 ## Project Structure
 
