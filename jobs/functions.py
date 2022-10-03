@@ -55,7 +55,7 @@ def validate_date_ranges(start_date: str, end_date: str) -> None:
     :return: None
     """      
     if(start_date > end_date):
-        raise Exception(f"end_date (current value {end_date}) should be bigger than start_date (current value {start_date})")
+        raise Exception(f"end_date (current value: {end_date}) should be bigger than start_date (current value: {start_date})")
 
 
 def send_email (message: str) -> None:
