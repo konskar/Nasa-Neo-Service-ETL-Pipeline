@@ -353,7 +353,7 @@ class Test_Populating_MongoDB_Production(unittest.TestCase):
     """Unit tests for populating mongodb production collection
 
     mongodb_production should match mongodb_staging on dates that are on staging
-    mongodb_production has data for other dates that should not ne affected 
+    mongodb_production has data for other dates that should not be affected 
     """
 
     # Test cases
