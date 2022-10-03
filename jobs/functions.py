@@ -340,8 +340,6 @@ Subject: Airflow Success Notification: Dag Run
 
 dag_run: {kwargs["dag_run"]}
 
-ds: {kwargs["ds"]}
-
 params: {kwargs["params"]}
 
 """
