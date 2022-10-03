@@ -325,7 +325,7 @@ class Test_Loading_Parquet_to_MongoDB_Staging(unittest.TestCase):
                                                    .count() \
                                                    .sort("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid")
 
-        mongodb_staging_df_agg_md5_hash = hashlib.md5(str(mongodb_staging_df_agg.collect()[0:]).encode('utf-8')).hexdigest()
+        mongodb_staging_df_agg_md5_hash = hashlib.md5(str(mongodb_staging_df_agg.collect()).encode('utf-8')).hexdigest()
         
         self.assertEqual(transformed_df_agg_md5_hash, mongodb_staging_df_agg_md5_hash)
 
