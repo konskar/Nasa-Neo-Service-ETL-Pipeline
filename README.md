@@ -104,7 +104,9 @@ To run this project need to:
 
 - Create `.env` file with your secrets/paths (used by configs/elt_config.py), see `resources/.env_sample` for reference.
 
-- Install pip dependencies
+- Create dag folder for the project in `airflowhome/dags` e.g. `airflowhome/dags/nasa_neo_service_elt_dag`
+
+- Install pip dependencies (don't create venv in `airflowhome/dags` because will crash airflow due to large folder size)
   ```bash
   pip install virtualenv
   virtualenv venv # create virtual environment to isolate dependancies
