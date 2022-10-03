@@ -22,7 +22,7 @@ default_args = {
     "email": cfg.email["receiver_email_list"],
     "email_on_failure": True,
     "email_on_retry": False,
-    "retries": 3,
+    "retries": 2,
     "retry_delay": timedelta(seconds=30),
 }
 
@@ -35,7 +35,7 @@ with DAG(
 
     collect_api_data = PythonOperator(
         task_id="collect_api_data",
-        python_callable=f.collect_api_data
+        python_callable=f.collect_api_data,
     )
 
     transform_and_write_to_parquet = PythonOperator(
@@ -51,13 +51,11 @@ with DAG(
     populate_mongodb_production = PythonOperator(
         task_id="populate_mongodb_production",
         python_callable=f.populate_mongodb_production,
-        retries=1
     )
 
     send_success_notification = PythonOperator(
         task_id ='send_success_notification',
         python_callable=f.send_success_notification,
-        retries=1
     )
 
 collect_api_data >> transform_and_write_to_parquet >> load_parquet_to_mongodb_staging >> populate_mongodb_production >> send_success_notification
