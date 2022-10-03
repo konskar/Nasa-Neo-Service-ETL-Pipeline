@@ -102,9 +102,9 @@ To run this project need to:
 - Setup [Metabase](https://www.metabase.com/docs/latest/installation-and-operation/installing-metabase)
 - Setup [Self-hosted github actions runner](https://docs.github.com/en/actions/hosting-your-own-runners/adding-self-hosted-runners)
 
-- Create `.env` file with your secrets/paths (used by configs/elt_config.py), see `resources/.env_sample` for reference.
-
 - Create dag folder for the project in `airflowhome/dags` e.g. `airflowhome/dags/nasa_neo_service_elt_dag`
+
+- Create `.env` file with your secrets and paths (used by configs/elt_config.py), see `resources/.env_sample` for reference.
 
 - Install pip dependencies (don't create venv in `airflowhome/dags` because will crash airflow due to large folder size)
   ```bash
@@ -116,7 +116,6 @@ To run this project need to:
 
 - Create mongo databases (nasa_gov, test_nasa_gov) and import json collections, see `resources/mongo` for queries and collections (json files) to import.
  <img src="https://user-images.githubusercontent.com/12799365/193393185-d7e645d5-7a5f-41da-8cb5-d646437f1f07.png" width=20% height=20% />
-
 
 ## Usage
 
