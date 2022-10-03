@@ -6,7 +6,7 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 
-dotenv_path = Path('/c/Users/KonstantinosKaragian/airflowhome/dags/nasa_neo_service_etl_dag/.env')
+dotenv_path = Path('/c/Users/KonstantinosKaragian/airflowhome/dags/nasa_neo_service_elt_dag/.env')
 load_dotenv(dotenv_path=dotenv_path)
 
 airflow = {

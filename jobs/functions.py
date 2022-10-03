@@ -15,7 +15,7 @@ import smtplib, ssl
 import logging
 
 # Local application imports
-from nasa_neo_service_etl_dag.configs import elt_config as cfg
+from nasa_neo_service_elt_dag.configs import elt_config as cfg
 
 
 # Initialize objects
