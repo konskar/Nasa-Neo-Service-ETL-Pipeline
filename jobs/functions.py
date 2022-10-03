@@ -55,7 +55,7 @@ def validate_date_ranges(start_date: str, end_date: str) -> None:
     :return: None
     """      
     if(start_date > end_date):
-        raise Exception(f"end_date (current value {end_date}) should be bigger than start_date (current value {start_date})")
+        raise Exception(f"end_date (current value: {end_date}) should be bigger than start_date (current value: {start_date})")
 
 
 def send_email (message: str) -> None:
@@ -235,7 +235,7 @@ def transform_and_write_to_parquet( \
 
     except Exception as e:
 
-        # Force Airflow task to fail so all downstream tasks won't execute
+        # Force Airflow task to fail so downstream tasks won't execute
         raise AirflowException({e})
 
 
@@ -339,8 +339,6 @@ def send_success_notification(**kwargs: dict) -> None:
 Subject: Airflow Success Notification: Dag Run 
 
 dag_run: {kwargs["dag_run"]}
-
-ds: {kwargs["ds"]}
 
 params: {kwargs["params"]}
 
