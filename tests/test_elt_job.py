@@ -158,13 +158,13 @@ class Test_API_Client(unittest.TestCase):
         api_produced_df_avg_lunar_distance = (
                                                 api_produced_df
                                                 .agg(avg('lunar_distance').alias('average_lunar_distance'))
-                                                .collect()[0]['average_lunar_distance']
+                                                .collect()[0][0]
                                              )
 
         api_validated_df_avg_lunar_distance = (
                                                 api_validated_df
                                                 .agg(avg('lunar_distance').alias('average_lunar_distance'))
-                                                .collect()[0]['average_lunar_distance']
+                                                .collect()[0][0]
                                                )
         
         self.assertEqual(api_produced_df_avg_lunar_distance, api_validated_df_avg_lunar_distance)
@@ -174,13 +174,13 @@ class Test_API_Client(unittest.TestCase):
         api_produced_df_velocity_in_km_per_hour = (
                                                     api_produced_df
                                                     .agg(sum('velocity_in_km_per_hour').alias('sum_velocity_in_km_per_hour'))
-                                                    .collect()[0]['sum_velocity_in_km_per_hour']
+                                                    .collect()[0][0]
                                                   )
 
         api_validated_df_velocity_in_km_per_hour = (
                                                     api_validated_df
                                                     .agg(sum('velocity_in_km_per_hour').alias('sum_velocity_in_km_per_hour'))
-                                                    .collect()[0]['sum_velocity_in_km_per_hour']
+                                                    .collect()[0][0]
                                                    )
         
         self.assertEqual(api_produced_df_velocity_in_km_per_hour, api_validated_df_velocity_in_km_per_hour)
@@ -190,13 +190,13 @@ class Test_API_Client(unittest.TestCase):
         api_produced_df_sum_of_estimated_diameter_min_in_km = (
                                                                 api_produced_df
                                                                 .agg(sum('estimated_diameter_min_in_km').alias('sum_estimated_diameter_min_in_km'))
-                                                                .collect()[0]['sum_estimated_diameter_min_in_km']
+                                                                .collect()[0][0]
                                                               )
 
         api_validated_df_sum_of_estimated_diameter_min_in_km = (
                                                                 api_validated_df
                                                                 .agg(sum('estimated_diameter_min_in_km').alias('sum_estimated_diameter_min_in_km'))
-                                                                .collect()[0]['sum_estimated_diameter_min_in_km']
+                                                                .collect()[0][0]
                                                                )
 
         self.assertEqual(api_produced_df_sum_of_estimated_diameter_min_in_km, api_validated_df_sum_of_estimated_diameter_min_in_km)
@@ -206,14 +206,14 @@ class Test_API_Client(unittest.TestCase):
         api_produced_df_sum_of_estimated_diameter_max_in_km = (
                                                                 api_produced_df
                                                                 .agg(sum('estimated_diameter_max_in_km').alias('sum_estimated_diameter_max_in_km'))
-                                                                .collect()[0]['sum_estimated_diameter_max_in_km']
+                                                                .collect()[0][0]
                                                               )
 
         api_validated_df_sum_of_estimated_diameter_max_in_km = (
                                                                 api_validated_df
                                                                 .agg(sum('estimated_diameter_max_in_km').alias('sum_estimated_diameter_max_in_km'))
-                                                                .collect()[0]['sum_estimated_diameter_max_in_km']
-                                                               )     
+                                                                .collect()[0][0]
+                                                               )    
 
         self.assertEqual(api_produced_df_sum_of_estimated_diameter_max_in_km, api_validated_df_sum_of_estimated_diameter_max_in_km)
 
