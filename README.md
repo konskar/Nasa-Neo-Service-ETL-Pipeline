@@ -48,7 +48,6 @@ Apply Big Data technologies, methodologies and tools creating an end-to-end ELT 
 - ELT
 - Configurable Pipelines
 - Observability
-- Reproducibility
 - Unit & Integration Testing
 - Reporting
 - Version Control
