@@ -45,6 +45,7 @@ Apply Big Data technologies, methodologies and tools creating an end-to-end ELT 
 
 - Consuming REST API data
 - Data Wrangling
+- ELT
 - Configurable Pipelines
 - Observability
 - Reproducibility
