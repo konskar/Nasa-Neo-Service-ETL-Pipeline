@@ -45,7 +45,7 @@ email = {
 }
 
 testing = {
-    "api_test_dataset": os.getenv('API_TEST_DATASET'),
+    "api_validated_dataset": os.getenv('API_VALIDATED_DATASET'),
     "api_produced_dataset": os.getenv('API_PRODUCED_DATASET'),
     "parquet_produced_dataset": os.getenv('PARQUET_PRODUCED_DATASET'),
     "test_database": os.getenv('MONGODB_TEST_DATABASE'),
@@ -57,7 +57,7 @@ absolute_paths = {
     "json_abs_path": os.path.join(airflow["project_path"], nasa_neo_api["json_file"]),
     "cache_abs_path": os.path.join(airflow["project_path"], nasa_neo_api["cache"]),
     "parquet_abs_path": os.path.join(airflow["project_path"], spark["parquet_path"]),
-    "api_test_dataset_abs_path": os.path.join(airflow["project_path"], testing["api_test_dataset"]),
+    "api_validated_dataset_abs_path": os.path.join(airflow["project_path"], testing["api_validated_dataset"]),
     "api_produced_dataset_abs_path": os.path.join(airflow["project_path"], testing["api_produced_dataset"]),
     "parquet_produced_dataset_abs_path": os.path.join(airflow["project_path"], testing["parquet_produced_dataset"])
 }
