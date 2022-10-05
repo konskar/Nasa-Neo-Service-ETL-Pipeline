@@ -11,10 +11,10 @@ from pyspark.sql.functions import col, sum, avg, to_date
 
 
 def Setup_Paths() -> None:
-    """ Define paths and import libraries according to the environment the script is running (WSL or Docker)
+    """ Define paths and import libraries
     """
 
-    global api_test_dataset_abs_path, api_produced_dataset_abs_path, parquet_produced_dataset_abs_path, cfg, f
+    global api_validated_dataset_abs_path, api_produced_dataset_abs_path, parquet_produced_dataset_abs_path, cfg, f
 
     file_path = os.path.dirname( __file__ )
 
@@ -27,7 +27,7 @@ def Setup_Paths() -> None:
     import elt_config as cfg
     import functions as f
 
-    api_test_dataset_abs_path = cfg.absolute_paths["api_test_dataset_abs_path"]
+    api_validated_dataset_abs_path = cfg.absolute_paths["api_validated_dataset_abs_path"]
     api_produced_dataset_abs_path = cfg.absolute_paths["api_produced_dataset_abs_path"]
     parquet_produced_dataset_abs_path = cfg.absolute_paths["parquet_produced_dataset_abs_path"]
 
@@ -37,7 +37,7 @@ def Produce_Files() -> None:
     """
 
     # define global paths
-    global api_produced_dataset_abs_path, parquet_produced_dataset_abs_path, api_test_dataset_abs_path
+    global api_produced_dataset_abs_path, parquet_produced_dataset_abs_path
 
     # Produce json file "api_produced_dataset" retrieving API data for the same period with the same schema as production grade test file
     f.collect_api_data(   start_date= '2022-07-27', \
@@ -75,7 +75,7 @@ def Spark_Setup() -> None:
         .getOrCreate()
 
     # Production grade dataset we have tested it's schema and data, will compare the produced datasets with it
-    api_validated_df = spark.read.option("multiline", "true").json(api_test_dataset_abs_path)
+    api_validated_df = spark.read.option("multiline", "true").json(api_validated_dataset_abs_path)
 
     # Dataframe of api_produced_dataset, should match api_validated_df
     api_produced_df = spark.read.option("multiline", "true").json(api_produced_dataset_abs_path)
