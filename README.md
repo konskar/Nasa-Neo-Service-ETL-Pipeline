@@ -71,7 +71,7 @@ The basic project structure is as follows:
     ├── produced_datasets
     │   ├── nasa_neo_api_landing.parquet
     │   └── nasa_neo_api_response.json
-    ├── test_datasets
+    ├── validated_datasets
     │   └── nasa_neo_api_response_27.07.2022-31.07.2022.json
     └── test_elt_job.py
 ├── requirements.txt
