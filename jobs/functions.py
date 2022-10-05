@@ -222,7 +222,7 @@ def transform_and_write_to_parquet( \
         nasa_neo_transformed_df = cached_nasa_neo_df \
                                 .withColumn("lunar_distance", col("lunar_distance").cast("double")) \
                                 .withColumn("velocity_in_km_per_hour", col("velocity_in_km_per_hour").cast("double")) \
-                                .withColumn("velocity_in_miles_per_hour", col("velocity_in_km_per_hour") * 0.6213712)
+                                .withColumn("velocity_in_miles_per_hour", col("velocity_in_km_per_hour") * 0.621371)
 
         nasa_neo_transformed_df.write.mode('overwrite').partitionBy("date").parquet(parquet_path)
 
@@ -235,7 +235,7 @@ def transform_and_write_to_parquet( \
 
     except Exception as e:
 
-        # Force Airflow task to fail so downstream tasks won't execute  
+        # Force Airflow task to fail so downstream tasks won't execute
         raise AirflowException({e})
 
 
