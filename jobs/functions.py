@@ -235,7 +235,7 @@ def transform_and_write_to_parquet( \
 
     except Exception as e:
 
-        # Force Airflow task to fail so downstream tasks won't execute 
+        # Force Airflow task to fail so downstream tasks won't execute  
         raise AirflowException({e})
 
 
