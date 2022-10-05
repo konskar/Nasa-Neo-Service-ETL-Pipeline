@@ -22,6 +22,9 @@ db.nasa_neo_service_staging.find({})
 
 db.nasa_neo_service_production.find({})
 
+db.nasa_neo_service_production.find({
+             date:{$eq:ISODate("2022-10-02T21:00:00.000+00:00")}
+})
 
 
 //------------------------------------ test_nasa_gov queries
