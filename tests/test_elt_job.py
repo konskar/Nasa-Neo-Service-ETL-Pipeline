@@ -220,7 +220,7 @@ class Test_API_Client(unittest.TestCase):
 
     def test_dimension_count(self):
         api_produced_df_agg = api_produced_df.groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid").count()
-        api_produced_df_agg_md5_hash = hashlib.md5(str(api_produced_df_agg.collect()[0:]).encode('utf-8')).hexdigest()
+        api_produced_df_agg_md5_hash = hashlib.md5(str(api_produced_df_agg.collect()).encode('utf-8')).hexdigest()
 
         api_validated_df_agg = api_validated_df.groupBy("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid").count()
         api_validated_df_agg_md5_hash = hashlib.md5(str(api_validated_df_agg.collect()).encode('utf-8')).hexdigest()
@@ -270,7 +270,7 @@ class Test_Transformations(unittest.TestCase):
                                             .count() \
                                             .sort("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid")
 
-        transformed_df_agg_md5_hash = hashlib.md5(str(transformed_df_agg.collect()[0:]).encode('utf-8')).hexdigest()
+        transformed_df_agg_md5_hash = hashlib.md5(str(transformed_df_agg.collect()).encode('utf-8')).hexdigest()
         
         self.assertEqual(api_validated_df_agg_md5_hash, transformed_df_agg_md5_hash)
 
@@ -403,7 +403,7 @@ class Test_Populating_MongoDB_Production(unittest.TestCase):
                                                                                      .count() \
                                                                                      .sort("date", "neo_reference_id", "name", "nasa_jpl_url", "is_potentially_hazardous_asteroid")
 
-        mongodb_production_df_date_filtered_agg_md5_hash = hashlib.md5(str(mongodb_production_df_date_filtered_agg.collect()[0:]).encode('utf-8')).hexdigest()
+        mongodb_production_df_date_filtered_agg_md5_hash = hashlib.md5(str(mongodb_production_df_date_filtered_agg.collect()).encode('utf-8')).hexdigest()
         
         self.assertEqual(mongodb_staging_df_agg_md5_hash, mongodb_production_df_date_filtered_agg_md5_hash)
 
