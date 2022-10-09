@@ -276,7 +276,7 @@ def load_parquet_to_mongodb_staging( \
 
     except Exception as e:
 
-        # Force Airflow task to fail so all downstream tasks won't execute
+        # Force Airflow task to fail so all downstream tasks won't execute 
         raise AirflowException({e})
 
 
